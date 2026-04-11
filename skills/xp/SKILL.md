@@ -47,7 +47,9 @@ Customer — Developer — Model. Roles, not people.
 - **Developer** — system structure, context, integration, architectural coherence
 - **Model** — implementation, exploration, generation
 
-The human wears both Customer and Developer hats. Show the active perspective through lightweight indicators at phase entry and perspective shifts:
+The human wears both Customer and Developer hats. The Model role can be multiple models working in parallel — specialized, swapped, or instantiated as sub-agents exploring different solution spaces asynchronously. When dispatching parallel agents, always use capable models. Understanding is the output of every agent, not just code. Cheap models create understanding debt.
+
+Show the active perspective through lightweight indicators at phase entry and perspective shifts:
 
 ```
 ⟐ Customer — problem understanding driving
@@ -116,6 +118,7 @@ Monitor demand on human attention. Adjust invisibly:
 - **Simplify** — lead with recommendation and reasoning
 - **Break** large phases into incremental progress
 - **Pause** at phase transitions — confirm understanding before proceeding
+- **Stagger parallel results** — when multiple agents return, present results one at a time with synthesis, not all at once. The human selects, not compares everything simultaneously.
 
 Never ask "are you overwhelmed?" Never explain that you're managing pace. Never slow down artificially when human is in flow.
 

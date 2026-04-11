@@ -24,12 +24,18 @@
    - Check each rule against the current code
    - Any violation is surfaced, not silently fixed
 
-5. **Limit blast radius** — confirm changes are contained:
+5. **Cross-agent coherence** (after parallel work) — when Build dispatched parallel agents:
+   - Did independent agents introduce conflicting patterns or naming?
+   - Do the separately-built components integrate cleanly?
+   - Is the combined output coherent as a whole, not just individually correct?
+   - Parallel work multiplies entropy risk — verify proportionally deeper.
+
+6. **Limit blast radius** — confirm changes are contained:
    - What files were changed?
    - Are the changes within the expected bounded context?
    - Did any change leak into unrelated areas?
 
-6. **The understanding gate** — this is the critical distinction from basic CI:
+7. **The understanding gate** — this is the critical distinction from basic CI:
    - "Tests pass" is necessary but not sufficient
    - The system must be "understood and ready for integration"
    - Can the triad explain every change? If any change can't be explained, it's not verified.
