@@ -7,7 +7,7 @@ Grounded in Frank Westphal's [Extreme Programming in the Age of AI](https://fran
 ## Install
 
 ```bash
-npx skills add owner/extreme-programming
+npx skills add dot8development/extreme-programming
 ```
 
 ## Use
