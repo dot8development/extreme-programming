@@ -39,6 +39,16 @@ When running spikes:
 - Report what was learned, not just what was built
 - Discard the code — it served its purpose. The real implementation happens in Build.
 
+## Parallel Exploration
+
+When multiple spikes are independent (different assumptions, different approaches), dispatch them as parallel agents:
+
+1. **Define each spike clearly** — each agent gets: the question it's answering, the constraints, and what "learned enough" looks like
+2. **One spike per agent** — each agent explores one approach in isolation. No shared state between spikes.
+3. **Use capable models** — exploration requires judgment about what's worth pursuing and what to discard. Do not use cheap/fast models for spikes. Understanding is the output, not code.
+4. **Synthesize results yourself** — when agents return, the triad (not a subagent) compares what was learned across spikes. This is a selection and decision moment — it requires the navigator, not a worker.
+5. **Discard all spike code** — regardless of which approach wins, the code is disposable. Understanding transfers to Design and Build. Code does not.
+
 ## Exit Criteria
 
 - The triad has enough understanding to make a design decision

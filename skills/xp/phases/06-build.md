@@ -40,6 +40,16 @@ For each step from the plan:
    - Confused about approach? → Explore
    - Confused about structure? → Design
 
+## Parallel Build
+
+When the plan contains independent steps (no shared state, no sequential dependency), dispatch them as parallel agents:
+
+1. **Independence is the gate** — if step B depends on step A's output, they are sequential. Only truly independent steps run in parallel.
+2. **Each agent gets the full context** — the plan step, the design rules, the relevant test specifications, and the shared mental model. Agents don't inherit session context — construct exactly what they need.
+3. **Use capable models** — build steps require TDD discipline, assimilation judgment, and design rule conformance. Do not use cheap/fast models. Cutting cost here creates understanding debt.
+4. **Assimilate after convergence** — when parallel agents return, run a deeper assimilation check across all their combined output. Parallel work can introduce inconsistencies that each agent couldn't see in isolation.
+5. **Never parallelize assimilation itself** — assimilation is the triad's judgment about coherence. It happens sequentially, after parallel work converges.
+
 ## The Iron Law
 
 ```
