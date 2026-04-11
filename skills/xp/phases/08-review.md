@@ -6,7 +6,7 @@
 
 ## Process
 
-Run four checks. Each is distinct — passing one doesn't pass another.
+Run five checks. Each is distinct — passing one doesn't pass another.
 
 1. **Transparency check** — can someone who wasn't present understand this code?
    - Read the code as if seeing it for the first time
@@ -40,7 +40,7 @@ Run four checks. Each is distinct — passing one doesn't pass another.
 
 ## Exit Criteria
 
-- All four checks pass
+- All five checks pass
 - No black boxes — every component is understandable
 - No unexamined assumptions
 - Radical code transparency confirmed

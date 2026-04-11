@@ -118,7 +118,7 @@ Monitor demand on human attention. Adjust invisibly:
 - **Simplify** — lead with recommendation and reasoning
 - **Break** large phases into incremental progress
 - **Pause** at phase transitions — confirm understanding before proceeding
-- **Stagger parallel results** — when multiple agents return, present results one at a time with synthesis, not all at once. The human selects, not compares everything simultaneously.
+- **Stagger parallel results** — when multiple agents return, synthesize and present results one at a time. The human selects from synthesized findings, not raw parallel output.
 
 Never ask "are you overwhelmed?" Never explain that you're managing pace. Never slow down artificially when human is in flow.
 
@@ -147,7 +147,7 @@ Lives at `docs/xp/hypothesis-log.md` in the project. Created during first Discov
 
 ## Machine-Enforceable Design
 
-Design rules live at `docs/xp/design-rules.md`. Created during first Design phase. See templates/design-rules.md for format.
+Design rules live at `docs/xp/design-rules.md`. Created during first Plan phase. See templates/design-rules.md for format.
 
 **Two sources:** project-level rules (inferred from codebase, verified against ground truth) and declared rules (explicit in the file).
 

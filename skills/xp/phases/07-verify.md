@@ -47,4 +47,5 @@
 - Structural coherence confirmed — codebase matches mental model
 - Design rules satisfied — no violations
 - Blast radius contained — changes are within expected boundaries
+- Cross-agent coherence confirmed (if parallel work was dispatched)
 - The triad can explain every change

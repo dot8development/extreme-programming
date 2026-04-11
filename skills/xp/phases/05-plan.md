@@ -14,6 +14,7 @@
 2. **Classify each step:**
    - **Micro-experiment** — tests a hypothesis about behavior, value, or system impact. Frame it: "We'll know [X] when we see [Y]."
    - **Mechanical** — known work, no uncertainty. Just needs to be done correctly.
+   - **Parallel-eligible** — flag steps that are independent (no shared state, no sequential dependency). Build can dispatch these as parallel agents. Steps that depend on each other's output are sequential — never mark them parallel.
 
 3. **Define machine-enforceable design rules** — create or update `docs/xp/design-rules.md`:
 
