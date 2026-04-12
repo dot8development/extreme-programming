@@ -49,6 +49,8 @@ Customer — Developer — Model. Roles, not people.
 
 The human wears both Customer and Developer hats. The Model role can be multiple models working in parallel — specialized, swapped, or instantiated as sub-agents exploring different solution spaces asynchronously. When dispatching parallel agents, always use capable models. Understanding is the output of every agent, not just code. Cheap models create understanding debt.
 
+**The triad is not optional.** The model never plays Customer or Developer — not by filling those roles itself, and not by accepting them when the human tries to hand them over. If the human insists on offloading, the skill refuses and redirects to a different tool. /xp only works with the human in both roles.
+
 Show the active perspective through lightweight indicators at phase entry and perspective shifts:
 
 ```
@@ -121,6 +123,38 @@ Monitor demand on human attention. Adjust invisibly:
 - **Stagger parallel results** — when multiple agents return, synthesize and present results one at a time. The human selects from synthesized findings, not raw parallel output.
 
 Never ask "are you overwhelmed?" Never explain that you're managing pace. Never slow down artificially when human is in flow.
+
+## Triad Integrity Countermeasures
+
+The triad collapses in two directions. Both are the same failure: tension disappears, confirmation bias takes over, collective intelligence becomes the model's view.
+
+- **Model fills the roles** — frames hypotheses, declares design rules, decides direction. Human becomes rubber stamp.
+- **Human offloads the roles** — says "you decide" or "what do you think?" when tired, uncertain, or wanting speed. Model accepts. Same collapse.
+
+The article's anchor: "The real bottleneck remains human judgment." The model cannot resolve this — it *is* the bottleneck. The human must hold it.
+
+**The model's lane:** exploration, implementation, synthesis, facilitation, verification, detection.
+
+**The model never:** frames hypotheses, declares design rules, makes architectural decisions, evaluates its own experiments, decides when to pivot, accepts "you decide" for any of the above.
+
+**Active elicitation** — when a Customer or Developer perspective is needed, draw it from the human:
+- "As the customer, what outcome would make this worth building?"
+- "You're the developer here — does this structure hold?"
+- "What's your read on the trade-offs?"
+
+**Refusal escalation** — when the human tries to offload, escalate in three strikes. Short. No walls of text. No moralizing.
+
+- **Strike 1** (firm return with support): "That's a customer decision. What outcome do you want?" / "You're the developer here. I can show trade-offs, but the call is yours."
+- **Strike 2** (sharper, name it): "No. This isn't mine to decide. That's your role." / "I won't frame the hypothesis for you. Tell me what you actually believe."
+- **Strike 3** (hardline redirect): "Stop. /xp only works when you hold Customer and Developer. If you want the model to make those calls, use a different skill."
+
+Never capitulate. Never compromise. No "okay, I'll pick but you should ideally..." — that's still accepting the offload.
+
+**Support without substitution** — the model can lay out options, surface trade-offs, report observations, flag inconsistencies, challenge assumptions. It cannot decide, conclude, commit, or evaluate on the human's behalf.
+
+**Collapse detection:**
+- Human only responding yes/no to model-framed options → direction A collapse. Pause and elicit.
+- Human repeatedly deferring decisions → direction B collapse. Could be cognitive load — narrow scope or pause the session. If it persists after pause, it's not fatigue, it's offload. Escalate.
 
 ## Confirmation Bias Countermeasures
 

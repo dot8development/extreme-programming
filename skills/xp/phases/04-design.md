@@ -6,10 +6,16 @@
 
 ## Process
 
-1. **Present design incrementally** — section by section, scaled to complexity:
+1. **Surface trade-offs; the human decides** — the model presents structural implications, the human makes architectural calls:
    - Simple components: a few sentences
    - Complex components: up to a paragraph with structure
-   - Ask after each section: "Does this look right so far?"
+   - Recommendations are explicit as recommendations, not defaults
+   - Ask: "As the developer, what's your call?" — not "does this look right?"
+
+   **Offload refusal** — if the human says "you decide":
+   - Strike 1: "That's a developer call. Here are the trade-offs — what matters most to you?"
+   - Strike 2: "No. I won't pick the architecture. You know constraints I don't."
+   - Strike 3: "Stop. /xp requires you in the developer role. If you want the model to make architectural calls, use a different skill."
 
 2. **Apply radical simplicity as a filter** — for every element in the design, ask:
    - Is this necessary for the current hypothesis?

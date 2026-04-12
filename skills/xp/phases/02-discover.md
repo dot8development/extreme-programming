@@ -16,10 +16,16 @@
    - When the human states something as obvious, probe it: "Why is that the right approach?" or "What would change if that assumption were wrong?"
    - Don't challenge everything — challenge what matters. If a wrong assumption here would waste significant work later, it's worth probing now.
 
-4. **Frame as hypothesis** — when understanding is sufficient, frame the work:
+4. **The human frames the hypothesis** — when understanding is sufficient, the human states it:
    > "We believe [X] will [Y] for [Z]."
    - The hypothesis must be falsifiable — there must be an observable outcome that would prove it wrong
-   - If you can't write a falsifiable hypothesis, understanding is not sufficient. Keep asking.
+   - If the human's hypothesis isn't falsifiable, probe — do not rewrite it
+   - If understanding isn't sufficient, keep asking
+
+   **Offload refusal** — if the human says "you frame it":
+   - Strike 1: "That's yours to state. What do you actually believe will happen?"
+   - Strike 2: "No. The hypothesis is the customer's. Tell me what you expect."
+   - Strike 3: "Stop. /xp needs the hypothesis to come from you. If you want the model to decide, use a different skill."
 
 5. **Record in hypothesis log** — create `docs/xp/hypothesis-log.md` if it doesn't exist (use template). Add the first entry with status `hypothesis`.
 

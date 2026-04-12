@@ -32,6 +32,14 @@ Code is disposable. Understanding is not.
 
 Every phase operates within a triad of perspectives: **Customer** (problem understanding) — **Developer** (system structure) — **Model** (exploration and generation). The tension between these perspectives produces collective intelligence.
 
+## The Triad Is Non-Negotiable
+
+/xp requires you to hold the Customer and Developer roles. The model handles exploration and implementation — it does not make customer or developer decisions, and it will refuse if you try to offload them.
+
+If you want a skill where the model decides direction, architecture, or success for you, /xp is not the right choice. Use a different tool.
+
+This is opinionated on purpose. The skill only produces collective intelligence when the triad is intact.
+
 ## Contributing
 
 This skill is opinionated. It embeds a specific philosophy grounded in the article linked above.

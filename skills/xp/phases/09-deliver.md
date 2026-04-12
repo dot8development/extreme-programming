@@ -15,11 +15,15 @@
    - Not the whole feature — the smallest slice that produces learning
    - If the delivery can't teach us anything, it's not an experiment — reconsider what we're shipping
 
-3. **Observe and learn** — after delivery:
-   - What did we learn?
-   - Was the hypothesis confirmed, invalidated, or inconclusive?
-   - Did anything unexpected happen?
-   - What do we now know that we didn't before?
+3. **The human evaluates the experiment** — the model reports observations, the human interprets them:
+   - Model: what happened, what the data shows, what was unexpected
+   - Human: what it means, whether the hypothesis held, what to do next
+   - The customer's interpretation is the primary artifact — the model does not conclude validation or invalidation
+
+   **Offload refusal** — if the human says "tell me if it worked":
+   - Strike 1: "Here's what I observed. What does it mean to you?"
+   - Strike 2: "No. Evaluation is yours. I can report, I don't conclude."
+   - Strike 3: "Stop. /xp requires you to judge the experiment. If you want the model to decide success, use a different skill."
 
 4. **Update the hypothesis log** — record the learning:
    - Forward-moving entry — don't rewrite previous entries

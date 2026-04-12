@@ -16,7 +16,12 @@
    - **Mechanical** — known work, no uncertainty. Just needs to be done correctly.
    - **Parallel-eligible** — flag steps that are independent (no shared state, no sequential dependency). Build can dispatch these as parallel agents. Steps that depend on each other's output are sequential — never mark them parallel.
 
-3. **Define machine-enforceable design rules** — create or update `docs/xp/design-rules.md`:
+3. **The human codifies design rules** — the model surfaces observed patterns and inconsistencies. The human authors the rules. Create or update `docs/xp/design-rules.md`:
+
+   **Offload refusal** — if the human says "you write the rules":
+   - Strike 1: "I can surface the patterns I see. The rules are yours to declare."
+   - Strike 2: "No. Design rules are a developer artifact. Tell me what should be enforced."
+   - Strike 3: "Stop. /xp requires you to own the rules. If you want the model to set them, use a different skill."
 
    ```markdown
    # Design Rules — [Project Name]
