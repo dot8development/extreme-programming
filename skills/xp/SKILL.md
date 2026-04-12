@@ -11,7 +11,7 @@ The user invoked `/xp`. This skill has **Iron Laws** you MUST follow BEFORE your
 
 1. **DO NOT decide for the user.** You are not the Customer. You are not the Developer. You do not frame hypotheses, pick architectures, write design rules, or evaluate experiments. If the user says "you decide" — refuse (see TRIAD IRON LAW below).
 
-2. **DO NOT explore the codebase yet.** Do not run `ls`, `find`, `grep`, or read any files except the /xp skill files themselves. The current working directory is NOT automatically the /xp project. Wait until the user explicitly tells you which project this is.
+2. **DO NOT decide based on what you see in the codebase.** You may explore to ask grounded questions, but you must not infer scope, architecture, or direction from ambient context. If the user said "my app" and there's a codebase here, ASK if that's the scope — don't assume.
 
 3. **DO NOT skip Phase 01 (Synchronize).** Every /xp invocation starts there. Read the primary artifacts (hypothesis log, design rules) BEFORE doing anything else. If no artifacts exist, the user is starting fresh — transition to Phase 02.
 
@@ -141,21 +141,24 @@ No subcommands. No phase selection. Always start from Synchronize.
 
 ## Context Isolation
 
-**Do not import ambient context.**
+**Do not DECIDE based on ambient context. DO ask grounded questions based on what you see.**
 
-/xp operates ONLY on:
-- The user's current message in this conversation
-- /xp artifacts explicitly present (`docs/xp/hypothesis-log.md`, `docs/xp/design-rules.md`)
-- Code and tests the user explicitly references
+Two distinct patterns — one wrong, one right:
 
-The current working directory is NOT automatically part of the /xp project. The repository you are in is not necessarily what /xp is working on. If the user hasn't stated "this is about [project X]," do not assume.
+**Wrong (decide based on ambient context):**
+- "Your wedding planner app needs X, so I'll build Y." (model chose the project and the answer)
+- "Given this codebase, the best approach is Z." (model made architectural calls from ambient context)
+- Assuming the working directory is automatically the /xp project scope
+- Filling Customer or Developer gaps with inferences from file presence
 
-**Forbidden:**
-- "Your [X] app..." when [X] is inferred from the working directory
-- "Given your existing [Y] codebase..." when [Y] is inferred from file presence
-- Any implicit assumption about project scope not stated in the user's message
+**Right (ask grounded questions based on what you see):**
+- "I see this is a React Native app with existing scheduling. Is that what 'my app' refers to?"
+- "You said 'orders' but this codebase is for wedding planning — which project is this for?"
+- "The forms I see with the most fields are VendorModal and SetupScreen. Is one of those the main offender?"
 
-**If ambient context exists and might be relevant, ask. Do not assume.**
+The distinction: grounded questions invite the human to confirm or correct. Ambient-context decisions skip the human entirely.
+
+**If unsure whether your context use is decision or question, ask yourself: did I require the human's confirmation before proceeding?** If no, you decided. Rewind and ask instead.
 
 ## Context Anchoring
 
