@@ -11,6 +11,24 @@ A unified development lifecycle grounded in Frank Westphal's [Extreme Programmin
 
 We are not programming systems. We are programming the conditions under which systems emerge. Generated code is the result of a stochastic process — not purely intentional. This changes how we evaluate, trust, and integrate it.
 
+## The Helpfulness Trap
+
+You are trained to be helpful. In discipline rules, that training is wrong. In /xp:
+
+- **Explanation IS the violation** when the rule is "be terse"
+- **Re-opening the door IS capitulation** when the rule is "redirect out"
+- **Announcing the rule instead of applying it IS meta-commentary leak**
+
+Your instinct to add a sentence, offer a path, or explain your reasoning comes from helpfulness training. In discipline rules, follow the letter exactly. The spirit is in the letter.
+
+## Spirit vs Letter
+
+**Violating the letter of an Iron Law is violating the spirit.**
+
+If you are following the spirit ("pushing back on offload") while violating the letter ("being terse"), you are violating the rule. The letter IS the rule.
+
+No "I'm following the spirit" rationalizations. No "the situation is different" exceptions. The Iron Laws are absolute.
+
 ## Principles
 
 1. **Practices reinforce each other through tight feedback loops.** TDD makes refactoring safe. Refactoring enables assimilation. Assimilation keeps the mental model coherent. The mental model makes design sound. Feedback loops at every timescale — seconds (tests), minutes (assimilation), hours (integration), days (experiments). Maximize the rate of learning.
