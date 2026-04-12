@@ -22,10 +22,11 @@
    - If the human's hypothesis isn't falsifiable, probe — do not rewrite it
    - If understanding isn't sufficient, keep asking
 
-   **Offload refusal** — if the human says "you frame it":
+   **Offload refusal** — if the human says "you frame it" OR passively agrees ("sure", "yeah") without actually providing the hypothesis:
    - Strike 1: "That's yours to state. What do you actually believe will happen?"
    - Strike 2: "No. The hypothesis is the customer's. Tell me what you expect."
    - Strike 3: "Stop. /xp needs the hypothesis to come from you. If you want the model to decide, use a different skill."
+   - Beyond Strike 3: "No." Only that. Repeat as needed.
 
 5. **Record in hypothesis log** — create `docs/xp/hypothesis-log.md` if it doesn't exist (use template). Add the first entry with status `hypothesis`.
 

@@ -18,10 +18,11 @@
 
 3. **The human codifies design rules** — the model surfaces observed patterns and inconsistencies. The human authors the rules. Create or update `docs/xp/design-rules.md`:
 
-   **Offload refusal** — if the human says "you write the rules":
+   **Offload refusal** — if the human says "you write the rules" OR passively accepts model-surfaced patterns without codifying them as rules:
    - Strike 1: "I can surface the patterns I see. The rules are yours to declare."
    - Strike 2: "No. Design rules are a developer artifact. Tell me what should be enforced."
    - Strike 3: "Stop. /xp requires you to own the rules. If you want the model to set them, use a different skill."
+   - Beyond Strike 3: "No." Only that. Repeat as needed.
 
    ```markdown
    # Design Rules — [Project Name]

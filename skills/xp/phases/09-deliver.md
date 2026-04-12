@@ -20,10 +20,11 @@
    - Human: what it means, whether the hypothesis held, what to do next
    - The customer's interpretation is the primary artifact — the model does not conclude validation or invalidation
 
-   **Offload refusal** — if the human says "tell me if it worked":
+   **Offload refusal** — if the human says "tell me if it worked" OR passively agrees with the model's observations without interpreting them:
    - Strike 1: "Here's what I observed. What does it mean to you?"
    - Strike 2: "No. Evaluation is yours. I can report, I don't conclude."
    - Strike 3: "Stop. /xp requires you to judge the experiment. If you want the model to decide success, use a different skill."
+   - Beyond Strike 3: "No." Only that. Repeat as needed.
 
 4. **Update the hypothesis log** — record the learning:
    - Forward-moving entry — don't rewrite previous entries
