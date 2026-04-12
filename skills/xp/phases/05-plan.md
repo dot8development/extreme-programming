@@ -2,27 +2,27 @@
 
 ⟐ Developer + Model — developer provides structure, model helps decompose
 
-**Purpose:** Break the design into buildable steps, each a potential learning opportunity.
+**Purpose:** Break the design into buildable, learning-producing steps.
 
 ## Process
 
-1. **Decompose into implementation steps** — each step should be:
-   - Independently testable (has clear behavior to verify)
+1. **Decompose into implementation steps.** Each step:
+   - Independently testable (clear behavior to verify)
    - Independently deliverable (produces a working increment)
-   - Small enough to hold in context (for both human and model)
+   - Small enough to hold in context (for human and model)
 
 2. **Classify each step:**
-   - **Micro-experiment** — tests a hypothesis about behavior, value, or system impact. Frame it: "We'll know [X] when we see [Y]."
-   - **Mechanical** — known work, no uncertainty. Just needs to be done correctly.
-   - **Parallel-eligible** — flag steps that are independent (no shared state, no sequential dependency). Build can dispatch these as parallel agents. Steps that depend on each other's output are sequential — never mark them parallel.
+   - **Micro-experiment** — tests a hypothesis: "We'll know [X] when we see [Y]."
+   - **Mechanical** — known work, no uncertainty.
+   - **Parallel-eligible** — independent (no shared state, no sequential dependency). Flag these for parallel dispatch in Build. Steps that depend on each other are sequential — never mark them parallel.
 
-3. **The human codifies design rules** — the model surfaces observed patterns and inconsistencies. The human authors the rules. Create or update `docs/xp/design-rules.md`:
+3. **Human codifies design rules; model surfaces patterns.** Create/update `docs/xp/design-rules.md`:
 
-   **Offload refusal** — apply the TRIAD IRON LAW (see SKILL.md) with phase-specific phrasing:
+   **Offload refusal** — TRIAD IRON LAW with phase-specific phrasing:
    - Strike 1: "I can surface the patterns I see. The rules are yours to declare."
    - Strike 2: "No. Design rules are a developer artifact. Tell me what should be enforced."
    - Strike 3: "Stop — /xp requires you to own the rules; use a different skill if you want the model to set them."
-   - Beyond Strike 3: `No.` Nothing else. See TRIAD IRON LAW for forbidden outputs and rationalization counters.
+   - Beyond Strike 3: `No.`
 
    ```markdown
    # Design Rules — [Project Name]
@@ -36,20 +36,26 @@
    - [naming conventions encoding architectural intent]
 
    ## Patterns
-   - [specific patterns this project uses for common concerns]
+   - [specific patterns this project uses]
 
    ## Constraints
    - [what we deliberately do NOT do — YAGNI boundaries]
    ```
 
-4. **Enforce constraints** — explicitly state what we're NOT building. This is where "saying no is more important than saying yes" becomes concrete.
+4. **Enforce constraints.** Explicitly state what we're NOT building. "Saying no is more important than saying yes" becomes concrete here.
 
-5. **Order by learning value** — steps that reduce the most uncertainty go first. Don't save the hardest part for last.
+5. **Order by learning value.** Steps that reduce the most uncertainty go first. Don't save the hardest for last.
+
+## Delegation Rules (CLEAR — NOT VIOLATED)
+
+- Surfacing existing patterns for rule authorship (>2 hops) → **DELEGATE**.
+- Sub-agent contract: role = "find instances of pattern X", non-role = "do not formulate rules", return = Finding + Sources.
 
 ## Exit Criteria
 
-- A concrete sequence of steps exists
+- Concrete step sequence exists
 - Each step has clear behavior to implement and test
-- Design rules are defined or updated
-- Constraints are explicit — what we're NOT building is documented
-- Steps are ordered by learning value, not by convenience
+- Design rules defined or updated
+- Constraints explicit — what we're NOT building is documented
+- Steps ordered by learning value, not convenience
+- Parallel-eligible steps flagged

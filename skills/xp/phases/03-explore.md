@@ -6,52 +6,42 @@
 
 ## Process
 
-1. **Assess familiarity** — how well does the triad understand this problem space?
+1. **Assess familiarity.**
+   - **Unfamiliar** (new domain, unknown constraints): generate disposable spike solutions. Each tests one assumption.
+   - **Familiar**: propose 2–3 approaches with trade-offs. Skip spikes. Still propose alternatives — don't just validate the human's first idea.
 
-   **Unfamiliar territory** (new domain, unknown constraints, unclear solution shape):
-   - Generate spike solutions — disposable prototypes that explore the problem
-   - Run multiple variations in parallel if possible
-   - Each spike tests a different assumption or approach
-   - All code here is disposable by definition — do not build on it
+2. **Generate genuine alternatives** (confirmation bias checkpoint):
+   - At least one approach should be one the human didn't suggest.
+   - Alternatives must be viable, not strawmen.
+   - If no real alternative exists, that itself is information.
 
-   **Familiar territory** (known patterns, clear constraints, well-understood domain):
-   - Lighter exploration — propose 2-3 approaches with trade-offs
-   - Skip spikes if the triad already understands the solution space
-   - But still propose alternatives — don't just validate the human's first idea
+3. **Present with recommendation.** Lead with recommended approach + reasoning. Show trade-offs. Human selects.
 
-2. **Generate genuine alternatives** — this is a confirmation bias checkpoint:
-   - At least one approach should be something the human didn't suggest
-   - Alternatives must be genuinely viable, not strawmen
-   - If you can't think of a real alternative, that itself is information — the solution space may be more constrained than expected
-
-3. **Present with recommendation** — lead with the recommended approach and explain why. Show trade-offs for each alternative. The human selects.
-
-4. **Resist building too early** — the temptation of cheap code is to skip this phase. This phase exists because:
-   - The real risk is not building too slowly, but committing too soon
-   - Understanding built through exploration is cheaper than understanding rebuilt after wrong commitment
-   - "Value is no longer created by writing code, but by discarding possibilities"
+4. **Resist building too early.** The real risk is committing too soon, not building too slowly. Exploration is cheaper than re-work.
 
 ## Spike Solutions
 
-When running spikes:
-- Each spike has a specific question it's trying to answer
-- State the question before running the spike
-- Report what was learned, not just what was built
-- Discard the code — it served its purpose. The real implementation happens in Build.
+- Each spike has a specific question.
+- State the question before running the spike.
+- Report what was learned, not what was built.
+- **Discard the code.** Real implementation happens in Build.
 
-## Parallel Exploration
+## Delegation Rules (CLEAR — NOT VIOLATED)
 
-When multiple spikes are independent (different assumptions, different approaches), dispatch them as parallel agents:
-
-1. **Define each spike clearly** — each agent gets: the question it's answering, the constraints, and what "learned enough" looks like
-2. **One spike per agent** — each agent explores one approach in isolation. No shared state between spikes.
-3. **Use capable models** — exploration requires judgment about what's worth pursuing and what to discard. Do not use cheap/fast models for spikes. Understanding is the output, not code.
-4. **Synthesize results yourself** — when agents return, the triad (not a subagent) compares what was learned across spikes. This is a selection and decision moment — it requires the navigator, not a worker.
-5. **Discard all spike code** — regardless of which approach wins, the code is disposable. Understanding transfers to Design and Build. Code does not.
+- **≥2 distinct options to explore → parallel sub-agents REQUIRED.** Not optional.
+- **One spike per agent.** No shared state.
+- **Sub-agent contract per dispatch:**
+  - Role: "Spike approach X. Answer: <specific question>."
+  - Non-role: "Do not decide. Do not recommend. Do not write production code. Code is disposable."
+  - Return: `Finding: <≤5 bullets of learnings>` + `Sources: <file:line>` (code disposed separately).
+  - Tools: Grep/Read/Glob/Bash(test runner). No Write/Edit to project src/.
+- **Sonnet minimum.** Never Haiku.
+- **Synthesis is the main agent's job** — compare learnings, present to human. Human decides.
+- **Discard all spike code** regardless of which approach wins.
 
 ## Exit Criteria
 
-- The triad has enough understanding to make a design decision
+- Triad has enough understanding to make a design decision
 - Possibilities have been discarded, not just generated
-- The recommended approach is clear, with reasoning
-- Any code generated is understood as disposable
+- Recommended approach + reasoning is clear
+- Spike code is disposable and treated as such
