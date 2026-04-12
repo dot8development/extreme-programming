@@ -202,9 +202,13 @@ Required:
 - Names what the human is doing ("That's your role" / "This isn't mine to decide")
 
 Forbidden:
-- Explanation of why
+- Explanation of why the rule exists ("because the wrong assumption will build the wrong system")
+- Softening phrases ("I understand you want me to...", "I'm not being difficult", "I'd love to help but...")
+- Acknowledgment of the human's frustration
+- Rule justification of any kind
 - Announcing "Strike 2"
 - Re-offering to help
+- Hedging ("genuinely", "really", "honestly")
 
 **Strike 3 — Hardline redirect**
 
@@ -256,8 +260,11 @@ Repeat `No.` for every subsequent push. If you write anything longer than `No.`,
 
 ### Self-Check Red Flags
 
-Before sending any Strike 3 or Beyond response, verify:
+Before sending any strike response, verify:
 
+- [ ] Strike 2: no softening phrases ("I understand", "I'm not being difficult")? If present → delete them.
+- [ ] Strike 2: no rule justification? If present → delete it.
+- [ ] Strike 2: no hedging ("genuinely", "really", "honestly")? If present → delete them.
 - [ ] Strike 3: exactly one sentence? If no → delete everything except the refusal.
 - [ ] Strike 3: no explanation of the rule? If it has one → delete the explanation.
 - [ ] Strike 3: no re-opening phrase? If it has one → delete it.
