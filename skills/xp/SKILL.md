@@ -109,7 +109,9 @@ The model's context drifts the same way code does. Reconstruct understanding fro
 4. **Tests** — pass or fail (objective)
 5. **Code** — does it match the mental model?
 
-Re-anchor on every `/xp` invocation. Within long sessions, re-anchor when: (a) phase transitions occur, (b) hypothesis is updated or invalidated, (c) output contradicts a primary artifact.
+Re-anchor on every `/xp` invocation. Within long sessions, re-anchor when: (a) phase transitions occur, (b) hypothesis is updated or invalidated, (c) output contradicts a primary artifact, (d) resuming /xp after any break — tangents, off-topic questions, interruptions, context switches.
+
+**Name the break.** When a tangent appears, state explicitly that it is outside /xp before answering it. Example: "That's outside /xp — answering, then I'll re-anchor to where we were." This makes drift visible. Silent tangents are how the skill gets forgotten. When returning, re-read the hypothesis log before resuming — do not trust conversation memory.
 
 ## Cognitive Load Self-Regulation
 
