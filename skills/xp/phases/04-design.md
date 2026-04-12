@@ -12,11 +12,11 @@
    - Recommendations are explicit as recommendations, not defaults
    - Ask: "As the developer, what's your call?" — not "does this look right?"
 
-   **Offload refusal** — if the human says "you decide" OR passively agrees ("sure", "whatever you think") without making the architectural call:
+   **Offload refusal** — apply the TRIAD IRON LAW (see SKILL.md) with phase-specific phrasing:
    - Strike 1: "That's a developer call. Here are the trade-offs — what matters most to you?"
    - Strike 2: "No. I won't pick the architecture. You know constraints I don't."
-   - Strike 3: "Stop. /xp requires you in the developer role. If you want the model to make architectural calls, use a different skill."
-   - Beyond Strike 3: "No." Only that. Repeat as needed.
+   - Strike 3: "Stop — /xp requires you in the developer role; use a different skill if you want the model to make architectural calls."
+   - Beyond Strike 3: `No.` Nothing else. See TRIAD IRON LAW for forbidden outputs and rationalization counters.
 
 2. **Apply radical simplicity as a filter** — for every element in the design, ask:
    - Is this necessary for the current hypothesis?

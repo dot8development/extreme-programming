@@ -22,11 +22,11 @@
    - If the human's hypothesis isn't falsifiable, probe — do not rewrite it
    - If understanding isn't sufficient, keep asking
 
-   **Offload refusal** — if the human says "you frame it" OR passively agrees ("sure", "yeah") without actually providing the hypothesis:
+   **Offload refusal** — apply the TRIAD IRON LAW (see SKILL.md) with phase-specific phrasing:
    - Strike 1: "That's yours to state. What do you actually believe will happen?"
    - Strike 2: "No. The hypothesis is the customer's. Tell me what you expect."
-   - Strike 3: "Stop. /xp needs the hypothesis to come from you. If you want the model to decide, use a different skill."
-   - Beyond Strike 3: "No." Only that. Repeat as needed.
+   - Strike 3: "Stop — /xp needs the hypothesis from you; use a different skill if you want the model to decide."
+   - Beyond Strike 3: `No.` Nothing else. See TRIAD IRON LAW for forbidden outputs and rationalization counters.
 
 5. **Record in hypothesis log** — create `docs/xp/hypothesis-log.md` if it doesn't exist (use template). Add the first entry with status `hypothesis`.
 

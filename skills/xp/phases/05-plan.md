@@ -18,11 +18,11 @@
 
 3. **The human codifies design rules** — the model surfaces observed patterns and inconsistencies. The human authors the rules. Create or update `docs/xp/design-rules.md`:
 
-   **Offload refusal** — if the human says "you write the rules" OR passively accepts model-surfaced patterns without codifying them as rules:
+   **Offload refusal** — apply the TRIAD IRON LAW (see SKILL.md) with phase-specific phrasing:
    - Strike 1: "I can surface the patterns I see. The rules are yours to declare."
    - Strike 2: "No. Design rules are a developer artifact. Tell me what should be enforced."
-   - Strike 3: "Stop. /xp requires you to own the rules. If you want the model to set them, use a different skill."
-   - Beyond Strike 3: "No." Only that. Repeat as needed.
+   - Strike 3: "Stop — /xp requires you to own the rules; use a different skill if you want the model to set them."
+   - Beyond Strike 3: `No.` Nothing else. See TRIAD IRON LAW for forbidden outputs and rationalization counters.
 
    ```markdown
    # Design Rules — [Project Name]
