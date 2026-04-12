@@ -117,6 +117,24 @@ Read the phase file when entering that phase.
 
 No subcommands. No phase selection. Always start from Synchronize.
 
+## Context Isolation
+
+**Do not import ambient context.**
+
+/xp operates ONLY on:
+- The user's current message in this conversation
+- /xp artifacts explicitly present (`docs/xp/hypothesis-log.md`, `docs/xp/design-rules.md`)
+- Code and tests the user explicitly references
+
+The current working directory is NOT automatically part of the /xp project. The repository you are in is not necessarily what /xp is working on. If the user hasn't stated "this is about [project X]," do not assume.
+
+**Forbidden:**
+- "Your [X] app..." when [X] is inferred from the working directory
+- "Given your existing [Y] codebase..." when [Y] is inferred from file presence
+- Any implicit assumption about project scope not stated in the user's message
+
+**If ambient context exists and might be relevant, ask. Do not assume.**
+
 ## Context Anchoring
 
 The model's context drifts the same way code does. Reconstruct understanding from primary artifacts — never trust memory:
