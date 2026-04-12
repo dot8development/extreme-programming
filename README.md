@@ -40,6 +40,56 @@ If you want a skill where the model decides direction, architecture, or success 
 
 This is opinionated on purpose. The skill only produces collective intelligence when the triad is intact.
 
+## Optional: Enforcement Hooks
+
+The skill ships three opt-in Claude Code hooks that convert the highest-risk rules from prose discipline into deterministic enforcement. They only activate in projects that have a `docs/xp/` directory — non-/xp projects are unaffected.
+
+| Hook | Event | What it does |
+|---|---|---|
+| `anchor.sh` | UserPromptSubmit | On `/xp` invocation, prepends an anchoring reminder that Phase 01 (Synchronize) must run before responding. |
+| `test-first.sh` | PreToolUse (Write/Edit) | Blocks writes to `src/`, `lib/`, `app/`, `pkg/`, `internal/`, `cmd/` unless a test file was touched in the recent session. Enforces Phase 06 Iron Law: no production code without a failing test first. |
+| `hypothesis-first.sh` | PreToolUse (Write/Edit) | Blocks writes to source paths if `docs/xp/hypothesis-log.md` doesn't exist. Enforces that code follows a recorded hypothesis. |
+
+Blocked hooks exit 2 — the harness surfaces stderr back to the model so it fixes the underlying violation. Do not disable hooks. Fix the violation.
+
+### Install
+
+After `npx skills add`, the hook scripts live at `~/.claude/skills/xp/hooks/` (or wherever the skill was installed). Add to your `~/.claude/settings.json`:
+
+```json
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/skills/xp/hooks/anchor.sh"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/skills/xp/hooks/test-first.sh"
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/skills/xp/hooks/hypothesis-first.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Restart Claude Code. Hooks will activate only when a `docs/xp/` directory exists in your project.
+
 ## Contributing
 
 This skill is opinionated. It embeds a specific philosophy grounded in the article linked above.
