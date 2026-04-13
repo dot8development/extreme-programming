@@ -247,19 +247,23 @@ Human answering yes/no without asserting perspective, or explicitly deferring �
 
 ## DELEGATION IRON LAW
 
-**SUB-AGENTS ARE CONTEXT FIREWALLS.**
+**EXPLORATION TOOLS BELONG TO SUB-AGENTS.**
 
-Delegate when the WORK would pollute the main context with output you don't need to keep around. Not based on call count — based on what flows back.
+The main agent orchestrates and synthesizes. It does not explore. Read, Grep, Glob, WebFetch, WebSearch, large Bash output — all of it goes to a sub-agent that returns a Finding + Sources, never the raw result.
 
-**Delegate when:**
-- Running tests, builds, or linters → raw output is verbose and noisy
-- ≥2 distinct options in Phase 03 → parallel agents keep alternatives isolated until selection
-- Verifying design rules / scanning for patterns across the codebase → intermediate file content stays in the sub-agent
-- Anything that would dump large file contents or long tool output into the main thread
+You can't know in advance whether "one Read gets the answer" — by the time you find out, the raw content is already in your context, and you can't take it back. Default to delegation.
 
-**Don't delegate when:**
-- A single Read/Grep gets you the answer — that's normal exploration, not a context problem
-- The output IS the thing you're working with (editing a file you just read, applying findings you just gathered)
+**Sub-agents handle:**
+- Locating definitions, implementations, call sites
+- Analyzing the codebase for patterns
+- Tracing flow across files / services / boundaries
+- Code, documentation, or web research
+- Running tests, builds, linters (raw output stays in the sub-agent)
+- Parallel exploration of ≥2 distinct options (Phase 03)
+
+**Main agent uses Read/Edit/Write only when:**
+- Reading a file it's about to edit (not exploration — preparation to write)
+- Editing or writing files (the work itself, not investigation)
 
 **Forbidden:** sub-agents do not decide / recommend / conclude. No role-based agents ("frontend engineer", "Customer agent") — task-based only.
 
