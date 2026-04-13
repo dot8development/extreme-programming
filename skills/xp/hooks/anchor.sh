@@ -88,77 +88,43 @@ EOF
         done
 
         if [ -n "$MISSING" ]; then
+            README_PATH=""
+            for p in "$HOME/.claude/skills/xp/../README.md" "$HOME/.claude/skills/extreme-programming/README.md"; do
+                [ -f "$p" ] && README_PATH="$(cd "$(dirname "$p")" && pwd)/README.md" && break
+            done
+
             cat <<'EOF'
 
-[/xp hook installation check — MISSING HOOKS]
+[/xp hook installation — Claude Code]
 
-Some /xp enforcement hooks are not wired into your settings. Without
-them, /xp falls back to prose-only enforcement, which testing shows is
-bypassed (model uses Bash for exploration, skips test-first, etc.).
+Some /xp enforcement hooks are not wired into your Claude Code settings.
+Without them, /xp falls back to prose-only enforcement, which testing
+shows is bypassed (model uses Bash for exploration, skips test-first).
 
-Missing:
+Missing hooks:
 EOF
             printf '  %s\n' $MISSING
 
-            cat <<'EOF'
+            cat <<EOF
 
-**YOUR FIRST TASK THIS SESSION: ask the user how to proceed.**
+**YOUR FIRST TASK THIS SESSION: ask the user.**
 
-Pose this question verbatim, then wait for the user's reply before
-continuing with /xp:
+Pose this question verbatim, wait for the reply before continuing /xp:
 
-  "Your /xp enforcement hooks aren't wired into your settings.
-   Install them now? (yes / no / don't ask again)"
+  "Your /xp enforcement hooks aren't wired into your Claude Code
+   settings. Install them now? (yes / no / don't ask again)"
 
-Depending on the answer:
+yes → Read the install snippet from the "Claude Code" section of the
+      skill's README (${README_PATH:-at https://github.com/dot8development/extreme-programming#install}).
+      Merge it into ~/.claude/settings.json, preserving any existing
+      hooks (merge arrays per event, do not overwrite). Validate the
+      file with \`python3 -m json.tool\` or \`jq .\`. Report result.
+      The user must restart Claude Code for hooks to take effect.
 
-  yes → Merge the snippet below into ~/.claude/settings.json. If the
-        file already has a "hooks" block, merge arrays per event (do
-        NOT overwrite existing hooks). After writing, verify the file
-        still parses as valid JSON (pipe through `python3 -m json.tool`
-        or `jq .`). Report success/failure. The user must restart
-        their harness for hooks to take effect.
+no  → Proceed with /xp. Warning reappears next invocation.
 
-  no  → Proceed with /xp for this session. Hooks remain un-wired.
-        This warning will appear again on the next /xp invocation.
-
-  don't ask again → Create `~/.claude/.xp-no-hooks` (empty file). This
-        suppresses the check going forward. Then proceed with /xp.
-
-Snippet to merge (Claude Code):
-
-  {
-    "hooks": {
-      "UserPromptSubmit": [
-        { "hooks": [
-            { "type": "command", "command": "bash ~/.claude/skills/xp/hooks/anchor.sh" },
-            { "type": "command", "command": "bash ~/.claude/skills/xp/hooks/offload-detect.sh" }
-        ]}
-      ],
-      "PreToolUse": [
-        { "matcher": "Write|Edit|MultiEdit", "hooks": [
-            { "type": "command", "command": "bash ~/.claude/skills/xp/hooks/test-first.sh" },
-            { "type": "command", "command": "bash ~/.claude/skills/xp/hooks/hypothesis-first.sh" }
-        ]},
-        { "matcher": "Grep|Glob|WebFetch|WebSearch|Bash", "hooks": [
-            { "type": "command", "command": "bash ~/.claude/skills/xp/hooks/explore.sh" }
-        ]},
-        { "matcher": "Task|Agent", "hooks": [
-            { "type": "command", "command": "bash ~/.claude/skills/xp/hooks/sonnet.sh" }
-        ]}
-      ],
-      "PostToolUse": [
-        { "matcher": "Task|Agent", "hooks": [
-            { "type": "command", "command": "bash ~/.claude/skills/xp/hooks/return-format.sh" }
-        ]}
-      ]
-    }
-  }
-
-(For Codex / Cursor / Windsurf / Copilot / Cline: see the README for
-harness-specific install snippets. This check looks at Claude Code
-paths; on other harnesses the user should answer "don't ask again" and
-wire hooks per README instead.)
+don't ask again → Create \`~/.claude/.xp-no-hooks\` (empty file);
+      suppresses the check going forward. Then proceed.
 EOF
         fi
     fi
