@@ -40,7 +40,7 @@
 
 - Design decisions are the human's. **Do not delegate decisions.**
 - Codebase pattern-matching to inform the design (>2 hops) → **DELEGATE**.
-- Sub-agent contract: role = "surface pattern X across codebase", non-role = "do not recommend / do not decide", return = Finding + Sources.
+- Sub-agent contract: role = "surface pattern X across codebase", non-role = "Do not decide. Do not recommend. Do not conclude.", return = Finding + Sources.
 
 ## Design Is Evolutionary
 

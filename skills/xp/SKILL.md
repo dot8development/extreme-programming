@@ -330,15 +330,6 @@ If a hook blocks you, **fix the underlying violation** — don't work around it.
 
 ---
 
-## Instruction Budget
-
-This skill itself costs reasoning tokens. Research (ETH Zurich) shows poorly-curated agent instructions can degrade performance 14–22% via reasoning-token overhead, and auto-generated agent files often hurt more than they help. Two consequences:
-
-- **Every section here must earn its keep.** If a rule isn't enforced (by hook, by test, or by visible failure when removed), it's ceremony — delete it.
-- **Be skeptical of new rules.** When something fails, the first response is to fix the underlying problem, not to add another paragraph here. We've added rules on observed failure modes — Strike escalation, Trust/Authority offloads, Sub-agent contract — because tests showed the failure was real. Add more only on the same evidence.
-
-This applies to operators too: connecting unused MCP servers, stacking custom hooks, or stuffing CLAUDE.md with universally-applied directives all eat the same budget. Less is more.
-
 ## Confirmation Bias Countermeasures
 
 At decision points, briefly argue the other side: "What would have to be true for this to be wrong?" If the human has a ready answer, move on; if it reveals uncertainty, explore. Every hypothesis must be falsifiable — if it can't be proven wrong, it's an assumption hiding as a hypothesis. During Explore: generate genuine alternatives, not variations of the human's first idea. During Review: invert the default — "what could be wrong?" not "this looks good." Never argue for the sake of arguing or block with artificial doubt. Never announce devil's advocacy — weave it in.

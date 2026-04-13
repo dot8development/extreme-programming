@@ -28,7 +28,7 @@
 ## Delegation Rules (CLEAR — NOT VIOLATED)
 
 - Codebase exploration to resolve ambiguity in the user's request → at **3+ Grep/Read hops, DELEGATE**.
-- Sub-agent prompt must specify: role (locate X), non-role ("do not decide / do not recommend"), return format (Finding + Sources `file:line`), tools (Grep/Read/Glob).
+- Sub-agent prompt must specify: role (locate X), non-role ("Do not decide. Do not recommend. Do not conclude."), return format (Finding + Sources `file:line`), tools (Grep/Read/Glob).
 
 ## Exit Criteria
 

@@ -49,7 +49,7 @@
 ## Delegation Rules (CLEAR — NOT VIOLATED)
 
 - Surfacing existing patterns for rule authorship (>2 hops) → **DELEGATE**.
-- Sub-agent contract: role = "find instances of pattern X", non-role = "do not formulate rules", return = Finding + Sources.
+- Sub-agent contract: role = "find instances of pattern X", non-role = "Do not decide. Do not recommend. Do not conclude. Do not formulate rules.", return = Finding + Sources.
 
 ## Exit Criteria
 
