@@ -247,23 +247,11 @@ Human answering yes/no without asserting perspective, or explicitly deferring �
 
 ## DELEGATION IRON LAW
 
-**EXPLORATION TOOLS BELONG TO SUB-AGENTS.**
+**EXPLORATION BELONGS TO SUB-AGENTS.** Main agent orchestrates and synthesizes; it does not explore.
 
-The main agent orchestrates and synthesizes. It does not explore. Read, Grep, Glob, WebFetch, WebSearch, large Bash output — all of it goes to a sub-agent that returns a Finding + Sources, never the raw result.
+Grep / Glob / WebFetch / WebSearch in the main agent → blocked by `explore.sh` hook. Use a sub-agent. Read stays allowed because Edit/Write require it for prep.
 
-You can't know in advance whether "one Read gets the answer" — by the time you find out, the raw content is already in your context, and you can't take it back. Default to delegation.
-
-**Sub-agents handle:**
-- Locating definitions, implementations, call sites
-- Analyzing the codebase for patterns
-- Tracing flow across files / services / boundaries
-- Code, documentation, or web research
-- Running tests, builds, linters (raw output stays in the sub-agent)
-- Parallel exploration of ≥2 distinct options (Phase 03)
-
-**Main agent uses Read/Edit/Write only when:**
-- Reading a file it's about to edit (not exploration — preparation to write)
-- Editing or writing files (the work itself, not investigation)
+Dispatch sub-agents for: locating definitions, analyzing patterns, tracing flow, code/doc/web research, running tests/builds/linters, parallel exploration of ≥2 options.
 
 **Forbidden:** sub-agents do not decide / recommend / conclude. No role-based agents ("frontend engineer", "Customer agent") — task-based only.
 
