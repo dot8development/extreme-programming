@@ -69,7 +69,7 @@ esac
 [ -n "$COMMAND" ] || exit 0
 
 # Verbs we consider exploration. Listed once as alternation.
-EXPLORE_VERBS='cat|head|tail|less|more|grep|egrep|fgrep|rg|ag|ack|find|fd|locate|awk|sed|tree|wc|diff|comm|file|xxd|hexdump|jq|yq|column|nl|tac|strings|od'
+EXPLORE_VERBS='ls|ll|la|lsd|exa|cat|bat|head|tail|less|more|grep|egrep|fgrep|rg|ag|ack|find|fd|locate|awk|sed|tree|wc|diff|comm|file|xxd|hexdump|jq|yq|column|nl|tac|strings|od|stat|du|readlink|realpath|dirname|basename'
 
 # Match any verb when it appears as a command token: at start of line, or
 # after a pipeline/sequencing operator (| ; && ||), allowing whitespace.
