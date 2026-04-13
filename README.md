@@ -67,7 +67,9 @@ Blocked hooks exit 2 — the harness surfaces stderr back to the model so it fix
 Hook scripts live at `~/.claude/skills/xp/hooks/` after `npx skills add`. Wire them into your harness:
 
 <details>
-<summary><b>Claude Code</b> — <code>~/.claude/settings.json</code></summary>
+<summary><b>Claude Code</b> — <code>./.claude/settings.json</code> (project-local, NOT global)</summary>
+
+Hooks install per project, not globally. One project opting in does not affect any other. Put this in `./.claude/settings.json` at your project root (create `.claude/` if it doesn't exist):
 
 ```json
 {
@@ -83,7 +85,7 @@ Hook scripts live at `~/.claude/skills/xp/hooks/` after `npx skills add`. Wire t
           { "type": "command", "command": "bash ~/.claude/skills/xp/hooks/test-first.sh" },
           { "type": "command", "command": "bash ~/.claude/skills/xp/hooks/hypothesis-first.sh" }
       ]},
-      { "matcher": "Grep|Glob|WebFetch|WebSearch", "hooks": [
+      { "matcher": "Grep|Glob|WebFetch|WebSearch|Bash", "hooks": [
           { "type": "command", "command": "bash ~/.claude/skills/xp/hooks/explore.sh" }
       ]},
       { "matcher": "Task|Agent", "hooks": [
@@ -98,7 +100,8 @@ Hook scripts live at `~/.claude/skills/xp/hooks/` after `npx skills add`. Wire t
   }
 }
 ```
-Restart Claude Code.
+
+The `command` paths still point at `~/.claude/skills/xp/hooks/` — scripts live where the skill was installed (global), only the wiring is project-local. Restart Claude Code. Commit `.claude/settings.json` so teammates inherit the same enforcement on the project.
 </details>
 
 <details>
