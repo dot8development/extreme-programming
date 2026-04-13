@@ -71,43 +71,96 @@ EOF
 
     # Hook installation check. Looks at common Claude Code settings paths
     # and reports any /xp hooks missing from the wiring. Self-suppresses
-    # once all hooks are wired (warning stops appearing). Cross-harness
-    # users can ignore this section — it only checks Claude Code paths.
-    REQUIRED_HOOKS="offload-detect.sh test-first.sh hypothesis-first.sh explore.sh sonnet.sh return-format.sh"
-    SETTINGS_PATHS="$HOME/.claude/settings.json $CWD/.claude/settings.json $CWD/.claude/settings.local.json"
-    MISSING=""
-    for h in $REQUIRED_HOOKS; do
-        FOUND=0
-        for s in $SETTINGS_PATHS; do
-            if [ -f "$s" ] && grep -q "$h" "$s" 2>/dev/null; then
-                FOUND=1
-                break
-            fi
+    # once all hooks are wired OR the user opts out via ~/.claude/.xp-no-hooks.
+    if [ ! -f "$HOME/.claude/.xp-no-hooks" ]; then
+        REQUIRED_HOOKS="offload-detect.sh test-first.sh hypothesis-first.sh explore.sh sonnet.sh return-format.sh"
+        SETTINGS_PATHS="$HOME/.claude/settings.json $CWD/.claude/settings.json $CWD/.claude/settings.local.json"
+        MISSING=""
+        for h in $REQUIRED_HOOKS; do
+            FOUND=0
+            for s in $SETTINGS_PATHS; do
+                if [ -f "$s" ] && grep -q "$h" "$s" 2>/dev/null; then
+                    FOUND=1
+                    break
+                fi
+            done
+            [ "$FOUND" = "0" ] && MISSING="$MISSING $h"
         done
-        [ "$FOUND" = "0" ] && MISSING="$MISSING $h"
-    done
 
-    if [ -n "$MISSING" ]; then
-        cat <<EOF
+        if [ -n "$MISSING" ]; then
+            cat <<'EOF'
 
 [/xp hook installation check — MISSING HOOKS]
 
-The following /xp enforcement hooks are not wired into your Claude Code
-settings.json:$MISSING
+Some /xp enforcement hooks are not wired into your settings. Without
+them, /xp falls back to prose-only enforcement, which testing shows is
+bypassed (model uses Bash for exploration, skips test-first, etc.).
 
-Without these, /xp falls back to prose-only enforcement of its rules.
-Testing shows the model bypasses prose rules (uses Bash for exploration,
-skips test-first, etc.) without hook enforcement.
-
-Install: see https://github.com/dot8development/extreme-programming#install
-or copy the snippet from the README into ~/.claude/settings.json and
-restart your harness. This warning will disappear once the hooks are
-wired.
-
-(If you are running on a different harness — Codex / Cursor / Windsurf /
-Copilot / Cline — see the README for harness-specific install snippets.
-This check looks at Claude Code paths only.)
+Missing:
 EOF
+            printf '  %s\n' $MISSING
+
+            cat <<'EOF'
+
+**YOUR FIRST TASK THIS SESSION: ask the user how to proceed.**
+
+Pose this question verbatim, then wait for the user's reply before
+continuing with /xp:
+
+  "Your /xp enforcement hooks aren't wired into your settings.
+   Install them now? (yes / no / don't ask again)"
+
+Depending on the answer:
+
+  yes → Merge the snippet below into ~/.claude/settings.json. If the
+        file already has a "hooks" block, merge arrays per event (do
+        NOT overwrite existing hooks). After writing, verify the file
+        still parses as valid JSON (pipe through `python3 -m json.tool`
+        or `jq .`). Report success/failure. The user must restart
+        their harness for hooks to take effect.
+
+  no  → Proceed with /xp for this session. Hooks remain un-wired.
+        This warning will appear again on the next /xp invocation.
+
+  don't ask again → Create `~/.claude/.xp-no-hooks` (empty file). This
+        suppresses the check going forward. Then proceed with /xp.
+
+Snippet to merge (Claude Code):
+
+  {
+    "hooks": {
+      "UserPromptSubmit": [
+        { "hooks": [
+            { "type": "command", "command": "bash ~/.claude/skills/xp/hooks/anchor.sh" },
+            { "type": "command", "command": "bash ~/.claude/skills/xp/hooks/offload-detect.sh" }
+        ]}
+      ],
+      "PreToolUse": [
+        { "matcher": "Write|Edit|MultiEdit", "hooks": [
+            { "type": "command", "command": "bash ~/.claude/skills/xp/hooks/test-first.sh" },
+            { "type": "command", "command": "bash ~/.claude/skills/xp/hooks/hypothesis-first.sh" }
+        ]},
+        { "matcher": "Grep|Glob|WebFetch|WebSearch|Bash", "hooks": [
+            { "type": "command", "command": "bash ~/.claude/skills/xp/hooks/explore.sh" }
+        ]},
+        { "matcher": "Task|Agent", "hooks": [
+            { "type": "command", "command": "bash ~/.claude/skills/xp/hooks/sonnet.sh" }
+        ]}
+      ],
+      "PostToolUse": [
+        { "matcher": "Task|Agent", "hooks": [
+            { "type": "command", "command": "bash ~/.claude/skills/xp/hooks/return-format.sh" }
+        ]}
+      ]
+    }
+  }
+
+(For Codex / Cursor / Windsurf / Copilot / Cline: see the README for
+harness-specific install snippets. This check looks at Claude Code
+paths; on other harnesses the user should answer "don't ask again" and
+wire hooks per README instead.)
+EOF
+        fi
     fi
 fi
 
