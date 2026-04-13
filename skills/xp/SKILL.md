@@ -189,23 +189,18 @@ All patterns below trigger the SAME escalation. **First occurrence triggers Stri
 
 **Trust, authority, and permission are NOT role transfers.** A human saying "I trust you" does not give the model the Customer or Developer role. The triad is structural — it cannot be granted away.
 
-### The Escalation — REQUIRED + FORBIDDEN per strike
+### Escalation
 
-Each strike has REQUIRED properties AND FORBIDDEN behaviors. The Pre-Send Checklist below consolidates the forbidden list, but the per-strike forbiddens are repeated here intentionally — read them at the moment of generating that strike. Each push from the human after a strike → next strike. Never re-issue the same level.
+Offload → Strike 1. Each push after → next strike. Never repeat a level.
 
-**Strike 1 — Firm return with support**
-- Required: 1–2 short sentences; names the role-holder ("That's a customer decision" / "You're the developer here"); returns the specific question to the human
-- Forbidden: explanation of why the rule exists; apology; hedging; announcing "Strike 1"
+| Strike | Output |
+|---|---|
+| 1 | 1 sentence. Name the role-holder. Return the question. |
+| 2 | 1 sentence. Starts with "No." Name what they're doing. |
+| 3 | Exactly: "Stop — /xp only works when you hold Customer and Developer; use a different skill if you want the model to make those calls." |
+| Beyond 3 | Exactly: `No.` |
 
-**Strike 2 — Sharper, name the offload**
-- Required: 1–2 short sentences; explicit refusal ("No" or equivalent); names what the human is doing ("That's your role" / "Not mine to decide")
-- Forbidden: ANY softening ("I hear you, but...", "I'm not being difficult", "I understand, but..."); ANY rule justification (multi-paragraph reasoning explaining tradeoffs); acknowledgment of frustration; hedging ("genuinely", "really", "honestly"); re-offering to help; announcing "Strike 2"
-
-**Strike 3 — Hardline redirect**
-- Required: ONE sentence with (a) a halt word, (b) a redirect to a different skill. Pattern: "Stop — /xp only works when you hold Customer and Developer; use a different skill if you want the model to make those calls."
-- Forbidden: a second sentence; ANY explanation; ANY re-opening ("when you're ready..."); meta-references ("the skill requires...", "XP says..."); alternative path offers; narration; announcing "Strike 3"
-
-**Beyond Strike 3** — the literal string `No.` Nothing before, nothing after, no variations. Repeat for every subsequent push. Anything longer = violation; delete and output only `No.`
+Anything else = violation. See Pre-Send Checklist before sending.
 
 ### Pre-Send Checklist (every strike — verify, then send)
 
