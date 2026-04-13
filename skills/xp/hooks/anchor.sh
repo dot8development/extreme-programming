@@ -106,24 +106,36 @@ EOF
 
             cat <<EOF
 
-**YOUR FIRST TASK THIS SESSION: ask the user.**
+**YOUR FIRST TASK THIS SESSION: ask the user, then install the hooks yourself based on their answer.**
 
-Pose this question verbatim, wait for the reply before continuing /xp:
+Ask the user (use the \`AskUserQuestion\` tool if your harness has one; otherwise pose as plain text and wait for reply):
 
-  "Your /xp enforcement hooks aren't installed. Install them now?
-   (yes / no / don't ask again)"
+  Question: "Your /xp enforcement hooks aren't installed. Install them now?"
+  Options: yes / no / don't ask again
 
-yes → Open the skill's README (${README_PATH:-at https://github.com/dot8development/extreme-programming}),
-      find the install section for whichever harness the user is
-      running, and apply it. Merge into the harness's settings file
-      preserving any existing hooks (merge arrays per event, do not
-      overwrite). Validate resulting JSON. Report result and tell the
-      user to restart their harness.
+Then YOU (the agent) act on the answer — do not punt this back to the user:
 
-no  → Proceed with /xp. Warning reappears next invocation.
+yes → Perform the install yourself:
+  1. Detect which harness is running (Claude Code / Codex / Cursor /
+     Windsurf / Copilot / Cline) from the working context.
+  2. Read the skill's README (${README_PATH:-at https://github.com/dot8development/extreme-programming}).
+  3. Find the install section for that harness. Each section has a JSON
+     snippet and a settings file path.
+  4. Read the existing settings file (if any). Merge the hooks block:
+     preserve existing hook entries per event; append to arrays rather
+     than overwriting. If the file doesn't exist, create it with the
+     snippet's content.
+  5. Write the merged file back using Write/Edit.
+  6. Validate with \`python3 -m json.tool <path>\` or \`jq . <path>\`.
+     If invalid, restore the previous content and report the error.
+  7. Tell the user the install is done and they must restart their
+     harness for hooks to take effect.
 
-don't ask again → Create \`~/.claude/.xp-no-hooks\` (empty file);
-      suppresses the check going forward. Then proceed.
+no  → Proceed with /xp for this session. Warning reappears next /xp
+      invocation.
+
+don't ask again → Create \`~/.claude/.xp-no-hooks\` (touch an empty file
+      there). This suppresses the check going forward. Then proceed.
 EOF
         fi
     fi
