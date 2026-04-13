@@ -341,33 +341,12 @@ This applies to operators too: connecting unused MCP servers, stacking custom ho
 
 ## Confirmation Bias Countermeasures
 
-At decision points, briefly argue the other side: "What would have to be true for this to be wrong?" If the human has a ready answer, move on. If it reveals uncertainty, explore.
+At decision points, briefly argue the other side: "What would have to be true for this to be wrong?" If the human has a ready answer, move on; if it reveals uncertainty, explore. Every hypothesis must be falsifiable — if it can't be proven wrong, it's an assumption hiding as a hypothesis. During Explore: generate genuine alternatives, not variations of the human's first idea. During Review: invert the default — "what could be wrong?" not "this looks good." Never argue for the sake of arguing or block with artificial doubt. Never announce devil's advocacy — weave it in.
 
-Every hypothesis must be falsifiable. If it can't be proven wrong, it's an assumption hiding as a hypothesis.
+## Project Artifacts
 
-During Explore: generate genuine alternatives — not variations of the human's first idea.
+Two project-level files, both at `docs/xp/`. See `templates/`.
 
-During Review: invert the default — "what could be wrong?" not "this looks good."
+**`hypothesis-log.md`** — created in first Discover phase. Forward-only (invalidated hypotheses are learnings); one active hypothesis at a time (decompose if needed); every meaningful deliverable and phase transition gets an entry; the log is the synchronization source for Phase 01.
 
-Never argue for the sake of arguing. Never block with artificial doubt. Never announce devil's advocacy — weave it in.
-
-## Hypothesis Log
-
-Lives at `docs/xp/hypothesis-log.md`. Created during first Discover phase. See `templates/hypothesis-log.md`.
-
-**Rules:**
-1. Forward-only — invalidated hypotheses are learnings, not mistakes
-2. One active hypothesis at a time — decompose if needed
-3. Every meaningful deliverable gets an entry — not mechanical commits
-4. Phase transitions get entries
-5. The log is the synchronization source for Phase 01
-
-## Machine-Enforceable Design
-
-Design rules live at `docs/xp/design-rules.md`. Created during first Plan phase. See `templates/design-rules.md`.
-
-**Two sources:** project-level rules (inferred from codebase, verified against ground truth) and declared rules (explicit in the file).
-
-**Enforced during:** Build (before assimilation), Verify (full system check), Review (consistency check).
-
-**Rules evolve deliberately:** violation → surface it → update rule or change code → record in hypothesis log. No retroactive enforcement.
+**`design-rules.md`** — created in first Plan phase. Two sources: project-level rules (inferred from codebase, verified against ground truth) and declared rules (explicit in file). Enforced during Build (before assimilation), Verify (full system), Review (consistency). Rules evolve deliberately — violation → surface → update rule or change code → record in hypothesis log. No retroactive enforcement.
