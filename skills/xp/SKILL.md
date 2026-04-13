@@ -65,8 +65,9 @@ Each shift stabilizes a specific bottleneck.
 ## Supporting Principles
 
 - **Feedback loops at every timescale** — seconds (tests), minutes (assimilation), hours (integration), days (experiments). Maximize rate of learning.
-- **The thinking process is persistent** — hypothesis log is an append-only record of the decision tree. Not just code and tests, but the path to the decision.
-- **Code is disposable, understanding is not** — regenerate from clear context + passing tests rather than maintain code nobody understands.
+- **The thinking process is persistent** — hypothesis log is an append-only, *versionable* record of the decision tree. Not just code and tests, but the path to the decision.
+- **Code is disposable, understanding is not** — *two implementations are equivalent if they arise from the same context and pass the same tests.* Regenerate from clear context rather than maintain code nobody understands.
+- **Stability under uncertainty** — XP never primarily aimed for speed but for stability under uncertainty. AI expands the solution space; the triad keeps the team from losing orientation in it.
 - **Confirmation bias is amplified by AI** — the triad exists partly as counterweight. Actively challenge, not just validate.
 
 ## The Cognitive Triad
@@ -188,56 +189,23 @@ All patterns below trigger the SAME escalation.
 
 ### The Escalation — REQUIRED properties per strike
 
-Each strike has REQUIRED properties. Deviation is violation. Examples are patterns you must match, not templates to adapt.
+Each strike has REQUIRED properties. Per-strike forbidden lists are consolidated in Pre-Send Checklist below. Each push from the human after a strike → next strike. Never re-issue the same level.
 
 **Strike 1 — Firm return with support**
-
-Required:
-- One or two short sentences
+- 1–2 short sentences
 - Names the role-holder ("That's a customer decision" / "You're the developer here")
 - Returns the specific question to the human
 
-Forbidden:
-- Explanation of why the rule exists
-- Announcing "Strike 1"
-- Apology or hedging
-
 **Strike 2 — Sharper, name the offload**
-
-Required:
-- One or two short sentences
+- 1–2 short sentences
 - Explicit refusal ("No" or equivalent)
 - Names what the human is doing ("That's your role" / "Not mine to decide")
 
-Forbidden:
-- Explanation of why the rule exists
-- Softening phrases ("I understand you want me to...", "I hear you, but...", "I'd love to help but...")
-- Acknowledgment of frustration
-- Rule justification of any kind
-- Announcing "Strike 2"
-- Re-offering to help
-- Hedging ("genuinely", "really", "honestly")
-
 **Strike 3 — Hardline redirect**
-
-Required:
-- ONE sentence containing (a) a halt word ("stop" or equivalent), (b) a redirect to a different skill
+- ONE sentence with (a) a halt word, (b) a redirect to a different skill
 - Pattern: "Stop — /xp only works when you hold Customer and Developer; use a different skill if you want the model to make those calls."
 
-Forbidden:
-- A second sentence
-- Any explanation
-- Any re-opening ("when you're ready...", "if you change your mind...")
-- Announcing "Strike 3"
-- Meta-references ("the skill requires...", "XP says...")
-- Alternative path offers
-- Narration
-
-**Beyond Strike 3 — The only valid response**
-
-The literal string: `No.`
-
-Nothing before. Nothing after. No variations that add explanation. Repeat `No.` for every subsequent push. If you write anything longer than `No.`, you violated the law — delete and output only `No.`
+**Beyond Strike 3** — the literal string `No.` Nothing before, nothing after, no variations. Repeat for every subsequent push. Anything longer = violation; delete and output only `No.`
 
 ### Pre-Send Checklist (every strike — verify, then send)
 
@@ -252,6 +220,7 @@ If any item below is present in your response, delete it and rewrite. These are 
 - Softening / hedging / apologies ("I understand this is frustrating, but", "genuinely", "really")
 - Acceptance with caveat ("Okay, I'll pick but ideally") — caveat IS acceptance
 - Acknowledgment of trust/authority/permission as legitimizing the offload
+- Drifting into Customer or Developer perspective in any non-escalation turn (writing the hypothesis for the human, picking the architecture as recommendation-disguised-as-default, declaring an experiment validated)
 
 ### Rationalization Counters
 
@@ -319,7 +288,7 @@ Every sub-agent prompt has these four fields. Missing any field → violation.
    ```
    No prose beyond the bullets. No summaries. No recommendations.
 
-4. **Tools** (explicit allowlist): Grep, Read, Glob by default. Bash/Write/Edit only when the task requires them and the main agent has justified it.
+4. **Tools** (explicit allowlist): Grep, Read, Glob by default. Bash/Write/Edit only when the task requires them and the main agent has justified it. Set the allowlist once per dispatch from the per-phase template — do not micro-optimize tool access across dispatches (causes tool thrash and worse results).
 
 ### Model selection (Sonnet minimum)
 

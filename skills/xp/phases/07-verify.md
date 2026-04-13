@@ -6,7 +6,9 @@
 
 ## Process
 
-1. **Run the full test suite.** Not just new tests. The entire suite. A failing test is a drift signal — don't skip, don't mark as known-failure.
+All execution steps below MUST run via sub-agents with output suppression (see Delegation Rules and Suppress Passing Output below). Running test suites or linters in the main agent's context floods it and degrades subsequent decisions.
+
+1. **Run the full test suite via sub-agent.** Not just new tests. The entire suite. A failing test is a drift signal — don't skip, don't mark as known-failure.
 
 2. **Check for probabilistic drift.** Unintended behavioral changes? Patterns inconsistent with the system? New unplanned dependencies?
 

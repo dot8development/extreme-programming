@@ -44,7 +44,7 @@ For each step from the plan:
 - **Sub-agent contract per dispatch:**
   - Role: "Implement step X per test Y. Apply design rules."
   - Non-role: "Do not modify unrelated files. Do not skip failing tests. Do not generate code without the test first. Do not decide scope."
-  - Return: `Finding: <≤5 bullets — what was built, test status, rule conformance>` + `Sources: <file:line>`.
+  - Return: `Finding: <≤5 bullets — what was built; test failures only; rule violations only>` + `Sources: <file:line>`. Empty test/rule lines = silent pass.
   - Tools: Read, Write, Edit, Bash(test runner), Grep, Glob. Scoped to step files only.
 - **Sonnet minimum.** Never Haiku. TDD discipline requires judgment.
 - **Never parallelize assimilation.** Assimilation is the triad's coherence judgment — sequential, after parallel work converges.

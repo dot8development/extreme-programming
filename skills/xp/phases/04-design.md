@@ -18,10 +18,12 @@
    - Strike 3: "Stop — /xp requires you in the developer role; use a different skill if you want the model to make architectural calls."
    - Beyond Strike 3: `No.`
 
-2. **Apply radical simplicity as a filter.** For each element:
+2. **Apply radical simplicity as a filter.** Generative systems produce three specific failure modes — extra abstractions, defensive structures, and overly generic architectures. For each element:
    - Necessary for the current hypothesis?
    - Could it be simpler?
    - Abstraction needed now, or later? If later → remove. YAGNI.
+   - Defensive code guarding against impossible scenarios? Remove.
+   - Genericity serving no current use case? Remove.
 
 3. **Establish/update the shared mental model.**
    - Can you explain this system in one narrative? If not, too complex.
