@@ -42,13 +42,17 @@ This is opinionated on purpose. The skill only produces collective intelligence 
 
 ## Optional: Enforcement Hooks
 
-The skill ships three opt-in Claude Code hooks that convert the highest-risk rules from prose discipline into deterministic enforcement. They only activate in projects that have a `docs/xp/` directory — non-/xp projects are unaffected.
+The skill ships seven opt-in hooks that convert the highest-risk rules from prose discipline into deterministic enforcement. They only activate in projects that have a `docs/xp/` directory — non-/xp projects are unaffected.
 
 | Hook | Event | What it does |
 |---|---|---|
-| `anchor.sh` | UserPromptSubmit | On `/xp` invocation, prepends an anchoring reminder that Phase 01 (Synchronize) must run before responding. |
-| `test-first.sh` | PreToolUse (Write/Edit) | Blocks writes to `src/`, `lib/`, `app/`, `pkg/`, `internal/`, `cmd/` unless a test file was touched in the recent session. Enforces Phase 06 Iron Law: no production code without a failing test first. |
-| `hypothesis-first.sh` | PreToolUse (Write/Edit) | Blocks writes to source paths if `docs/xp/hypothesis-log.md` doesn't exist. Enforces that code follows a recorded hypothesis. |
+| `anchor.sh` | UserPromptSubmit | On `/xp` invocation, prepends an anchoring reminder that Phase 01 (Synchronize) must run before responding. *(injection)* |
+| `offload-detect.sh` | UserPromptSubmit | Scans user message for offload phrases (trust/authority/permission/passive). Injects Strike-1 trigger when detected. *(injection)* |
+| `test-first.sh` | PreToolUse (Write/Edit) | Blocks writes to source paths unless a test file was touched recently. Enforces Phase 06 Iron Law. |
+| `hypothesis-first.sh` | PreToolUse (Write/Edit) | Blocks writes to source paths if `docs/xp/hypothesis-log.md` is missing. |
+| `delegate.sh` | PreToolUse (Grep/Read/Glob) | Blocks the 3rd consecutive exploration call. Enforces DELEGATION IRON LAW. |
+| `sonnet.sh` | PreToolUse (Task/Agent) | Blocks Task dispatches with `model="haiku"`. Enforces Sonnet-minimum. |
+| `return-format.sh` | PostToolUse (Task/Agent) | Validates sub-agent returns contain `Finding:` + `Sources:`. Injects re-dispatch instruction on malformed returns. *(injection)* |
 
 Blocked hooks exit 2 — the harness surfaces stderr back to the model so it fixes the underlying violation. Do not disable hooks. Fix the violation.
 
@@ -60,41 +64,140 @@ Blocked hooks exit 2 — the harness surfaces stderr back to the model so it fix
 
 ### Install
 
-After `npx skills add`, the hook scripts live at `~/.claude/skills/xp/hooks/` (or wherever the skill was installed). Add to your `~/.claude/settings.json`:
+Hook scripts live at `~/.claude/skills/xp/hooks/` after `npx skills add`. Wire them into your harness:
+
+<details>
+<summary><b>Claude Code</b> — <code>~/.claude/settings.json</code></summary>
 
 ```json
 {
   "hooks": {
     "UserPromptSubmit": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/skills/xp/hooks/anchor.sh"
-          }
-        ]
-      }
+      { "hooks": [
+          { "type": "command", "command": "bash ~/.claude/skills/xp/hooks/anchor.sh" },
+          { "type": "command", "command": "bash ~/.claude/skills/xp/hooks/offload-detect.sh" }
+      ]}
     ],
     "PreToolUse": [
-      {
-        "matcher": "Write|Edit|MultiEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/skills/xp/hooks/test-first.sh"
-          },
-          {
-            "type": "command",
-            "command": "bash ~/.claude/skills/xp/hooks/hypothesis-first.sh"
-          }
-        ]
-      }
+      { "matcher": "Write|Edit|MultiEdit", "hooks": [
+          { "type": "command", "command": "bash ~/.claude/skills/xp/hooks/test-first.sh" },
+          { "type": "command", "command": "bash ~/.claude/skills/xp/hooks/hypothesis-first.sh" }
+      ]},
+      { "matcher": "Grep|Read|Glob", "hooks": [
+          { "type": "command", "command": "bash ~/.claude/skills/xp/hooks/delegate.sh" }
+      ]},
+      { "matcher": "Task|Agent", "hooks": [
+          { "type": "command", "command": "bash ~/.claude/skills/xp/hooks/sonnet.sh" }
+      ]}
+    ],
+    "PostToolUse": [
+      { "matcher": "Task|Agent", "hooks": [
+          { "type": "command", "command": "bash ~/.claude/skills/xp/hooks/return-format.sh" }
+      ]}
     ]
   }
 }
 ```
+Restart Claude Code.
+</details>
 
-Restart Claude Code. Hooks will activate only when a `docs/xp/` directory exists in your project.
+<details>
+<summary><b>Codex CLI</b> — <code>~/.codex/hooks.json</code> + <code>codex_hooks = true</code> in <code>config.toml</code></summary>
+
+```json
+{
+  "version": 1,
+  "hooks": {
+    "UserPromptSubmit": [{ "type": "command", "command": "bash ~/.claude/skills/xp/hooks/anchor.sh" }],
+    "PreToolUse": [
+      { "matcher": "Write|Edit", "type": "command", "command": "bash ~/.claude/skills/xp/hooks/test-first.sh" },
+      { "matcher": "Write|Edit", "type": "command", "command": "bash ~/.claude/skills/xp/hooks/hypothesis-first.sh" }
+    ]
+  }
+}
+```
+Same exit-code-2 contract as Claude Code; scripts work as-is.
+</details>
+
+<details>
+<summary><b>Cursor</b> — <code>.cursor/hooks.json</code> (project) or <code>~/.cursor/hooks.json</code> (user)</summary>
+
+```json
+{
+  "version": 1,
+  "hooks": {
+    "beforeSubmitPrompt": [{ "command": "bash ~/.claude/skills/xp/hooks/anchor.sh" }],
+    "preToolUse": [
+      { "matcher": { "tool": "edit_file" }, "command": "bash ~/.claude/skills/xp/hooks/test-first.sh" },
+      { "matcher": { "tool": "edit_file" }, "command": "bash ~/.claude/skills/xp/hooks/hypothesis-first.sh" }
+    ]
+  }
+}
+```
+Cursor uses exit code 2 to block; scripts work as-is.
+</details>
+
+<details>
+<summary><b>Windsurf (Cascade)</b> — <code>.windsurf/hooks.json</code></summary>
+
+```json
+{
+  "version": 1,
+  "hooks": {
+    "pre_user_prompt": [{ "command": "bash ~/.claude/skills/xp/hooks/anchor.sh" }],
+    "pre_write_code": [
+      { "command": "bash ~/.claude/skills/xp/hooks/test-first.sh" },
+      { "command": "bash ~/.claude/skills/xp/hooks/hypothesis-first.sh" }
+    ]
+  }
+}
+```
+Caveat: Windsurf has no documented context-injection from hooks, so anchor.sh's reminder text may not reach the model. The gate hooks (test-first / hypothesis-first) work via exit code 2.
+</details>
+
+<details>
+<summary><b>GitHub Copilot</b> (Cloud Agent + VS Code) — <code>.github/hooks/hooks.json</code> (must be on default branch for Cloud Agent)</summary>
+
+```json
+{
+  "version": 1,
+  "hooks": {
+    "userPromptSubmitted": [{ "command": "bash ~/.claude/skills/xp/hooks/anchor.sh" }],
+    "preToolUse": [
+      { "matcher": { "toolName": "edit_file" }, "command": "bash ~/.claude/skills/xp/hooks/test-first.sh" },
+      { "matcher": { "toolName": "edit_file" }, "command": "bash ~/.claude/skills/xp/hooks/hypothesis-first.sh" }
+    ]
+  }
+}
+```
+Copilot prefers JSON `permissionDecision: "deny"` over exit code 2 — scripts may need a thin wrapper that converts exit 2 + stderr into a JSON `{"permissionDecision":"deny","reason":"<stderr>"}`. Status: untested. PRs welcome.
+</details>
+
+<details>
+<summary><b>Cline</b> — <code>~/Documents/Cline/Hooks/</code> (global) or <code>.clinerules/hooks/</code> (project)</summary>
+
+```json
+{
+  "version": 1,
+  "hooks": {
+    "UserPromptSubmit": [{ "command": "bash ~/.claude/skills/xp/hooks/anchor.sh" }],
+    "PreToolUse": [
+      { "matcher": "write_to_file|replace_in_file", "command": "bash ~/.claude/skills/xp/hooks/test-first.sh" },
+      { "matcher": "write_to_file|replace_in_file", "command": "bash ~/.claude/skills/xp/hooks/hypothesis-first.sh" }
+    ]
+  }
+}
+```
+Cline blocks via JSON `{"cancel": true}` rather than exit 2 — scripts may need a thin wrapper. macOS/Linux only. Status: untested. PRs welcome.
+</details>
+
+<details>
+<summary><b>Aider / Continue.dev</b> — no hook system</summary>
+
+These harnesses have no PreToolUse / UserPromptSubmit hook mechanism. The skill markdown still works; you'll rely on prose discipline rather than deterministic enforcement.
+</details>
+
+Hooks activate only when a `docs/xp/` directory exists in the project — non-/xp projects are unaffected on every harness.
 
 ## Contributing
 

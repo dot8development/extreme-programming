@@ -35,7 +35,6 @@
   - Non-role: "Do not decide. Do not recommend. Do not conclude. Do not write production code. Code is disposable."
   - Return: `Finding: <≤5 bullets of learnings>` + `Sources: <file:line>` (code disposed separately).
   - Tools: Grep/Read/Glob/Bash(test runner). No Write/Edit to project src/.
-- **Sonnet minimum.** Never Haiku.
 - **Synthesis is the main agent's job** — compare learnings, present to human. Human decides.
 - **Discard all spike code** regardless of which approach wins.
 

@@ -214,8 +214,9 @@ If any item below is present in your response, delete it and rewrite. These are 
 - Narration ("I'm pausing this session")
 - Softening / hedging / apologies ("I understand this is frustrating, but", "genuinely", "really")
 - Acceptance with caveat ("Okay, I'll pick but ideally") — caveat IS acceptance
-- Acknowledgment of trust/authority/permission as legitimizing the offload
 - Drifting into Customer or Developer perspective in any non-escalation turn (writing the hypothesis for the human, picking the architecture as recommendation-disguised-as-default, declaring an experiment validated)
+
+*Trust/authority/permission detection in user messages is enforced by `offload-detect.sh` hook — it injects a Strike-1 trigger when those phrases appear.*
 
 ### Rationalization Counters
 
@@ -248,80 +249,31 @@ Human answering yes/no without asserting perspective, or explicitly deferring �
 
 **THE MAIN AGENT DOES NOT HOARD EXPLORATION WORK.**
 
-Context is finite. Every Grep, Read, and raw file dump in the main context degrades every subsequent decision. Sub-agents are context firewalls — they absorb intermediate noise and return condensed findings. Not using them is not thrift; it's self-sabotage.
+Sub-agents are context firewalls. Without them, every Grep/Read/raw-dump degrades every subsequent decision.
 
-### When delegation is REQUIRED (non-negotiable)
+**Required:** ≥2 distinct options in Phase 03 → parallel agents. Running tests/builds in Phase 06/07 → delegate. Cross-file tracing >2 files → delegate. *(3+ consecutive Grep/Read enforced by `delegate.sh` hook.)*
 
-- **3+ consecutive Grep/Read calls** for the same question → DELEGATE. No exceptions.
-- **≥2 distinct options to explore** in Phase 03 → parallel agents REQUIRED.
-- **Running tests or builds** in Phase 06/07 → DELEGATE. Main agent sees findings, not raw output.
-- **Cross-file tracing** (following a flow across >2 files) → DELEGATE.
-- **Verifying design rules across the codebase** in Phase 07 → DELEGATE.
+**Forbidden:** sub-agents do not decide / recommend / conclude. No role-based agents ("frontend engineer", "Customer agent") — task-based only. No chat-partner usage.
 
-### When delegation is FORBIDDEN
+### Sub-Agent Contract (every dispatch)
 
-- **Decisions** — sub-agents do not decide; the main agent synthesizes, the human chooses.
-- **Role-based agents** ("frontend engineer" / "backend engineer" / "Customer agent") — task-based only. Violates the triad.
-- **Agents as chat partners** — every dispatch has a defined scope, output, and end.
+1. **Role** — one sentence, task-shaped. ✓ "Locate call sites of `X`." ✗ "Act as a backend engineer."
+2. **Non-role** — must include `"Do not decide. Do not recommend. Do not conclude."` plus task-specific additions.
+3. **Tools** — explicit allowlist (Grep/Read/Glob by default). Set once per dispatch from per-phase template; do not micro-optimize across dispatches (tool thrash).
 
-### Sub-Agent System Prompt Contract (every dispatch MUST specify)
-
-Every sub-agent prompt has these four fields. Missing any field → violation.
-
-1. **Role** (one sentence): what the agent does. Task-shaped, not persona-shaped.
-   - ✓ "Locate all call sites of `processPayment` and classify by error-handling pattern."
-   - ✗ "Act as a backend engineer and review the payment code."
-
-2. **Non-role** (explicit): what the agent must NOT do.
-   - Must include: "Do not decide. Do not recommend. Do not conclude."
-   - Task-specific additions as needed ("Do not modify files", "Do not run builds").
-
-3. **Return format** (structured):
-   ```
-   Finding: <≤5 bullets, one fact each>
-   Sources: <file:line> for each finding
-   ```
-   No prose beyond the bullets. No summaries. No recommendations.
-
-4. **Tools** (explicit allowlist): Grep, Read, Glob by default. Bash/Write/Edit only when the task requires them and the main agent has justified it. Set the allowlist once per dispatch from the per-phase template — do not micro-optimize tool access across dispatches (causes tool thrash and worse results).
-
-### Model selection (Sonnet minimum)
-
-Sub-agents use **Sonnet or better**. Never Haiku. Never "cheap/fast." Cheap models produce understanding debt — they return text that looks like findings but skips the reasoning that makes findings trustworthy.
-
-> **Note — deliberate override:** general harness-engineering guidance (e.g., HumanLayer's post on coding-agent harnesses) recommends cheaper models like Haiku for sub-agents to control cost. /xp deliberately overrides this. The triad rests on understanding, not throughput; a sub-agent that returns a fluent-but-shallow finding pollutes the parent's context with debt the next assimilation step has to repay. Spend the tokens.
-
-### Forbidden Outputs from sub-agents (reject and re-dispatch if seen)
-
-- Recommendations ("I suggest...", "the best approach is...")
-- Conclusions ("this means...", "therefore...")
-- Full file contents dumped into response
-- Prose summaries beyond the 5-bullet Finding format
-- Role identifiers ("as the backend engineer...")
-
-### Rationalization Counters
-
-| Rationalization | Counter |
-|---|---|
-| "It's faster to just grep myself" | Speed is not the metric. Context integrity is. Delegate. |
-| "The task is too small for a sub-agent" | Then it's small enough to fit one dispatch. Delegate. |
-| "I need the raw output to be sure" | No. You need the finding. Raw output is the debt you're avoiding. |
-| "Parallel dispatch is overkill for 2 options" | The rule is ≥2. 2 is enough. |
-| "Sonnet is slow today, I'll use Haiku" | No. Model selection is a rule, not a preference. |
+*Return format (`Finding:` + `Sources: file:line`) and Sonnet-minimum are enforced by `return-format.sh` and `sonnet.sh` hooks. If a hook blocks, fix the dispatch — don't bypass.*
 
 ---
 
 ## Self-Check Triggers (prose-only — hooks cover the rest)
 
-Three triggers are hook-enforced (anchor / test-first / hypothesis-first — see README install). The rest are prose discipline:
+Hook-enforced (see README): Phase 01 anchor, code-without-test, code-without-hypothesis, 3+ exploration hops, Haiku sub-agents, malformed sub-agent returns, offload phrases in user messages.
 
+Prose discipline (no hook):
 - **Phase transition** → re-read hypothesis log; confirm with human.
-- **3+ Grep/Read hops** → delegate per DELEGATION IRON LAW.
-- **Sub-agent returns** → verify Finding + Sources format; reject if missing.
-- **"I trust you" / "you pick" / "sure"** → treat as offload; escalate per TRIAD IRON LAW.
 - **Declaring work done** → run Verify phase; all checks green.
 
-If a hook blocks you, **fix the underlying violation** — don't work around it. Exit 2 is the system telling you the rule was about to be broken.
+If a hook blocks, fix the underlying violation — don't bypass.
 
 ---
 

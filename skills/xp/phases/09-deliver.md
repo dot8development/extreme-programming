@@ -44,7 +44,6 @@
   - Non-role: "Do not conclude validation/invalidation. Do not recommend next step. Do not interpret."
   - Return: `Finding: <observations only, ≤5 bullets>` + `Sources: <log/dashboard/commit>`.
   - Tools: Read, Grep, Bash(log/metrics CLI).
-- **Sonnet minimum.**
 
 ## Exit Criteria
 

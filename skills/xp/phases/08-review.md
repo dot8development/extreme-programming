@@ -43,7 +43,6 @@ Five distinct checks. Passing one does not pass another.
   - Non-role: "Do not decide. Do not recommend. Do not conclude. Do not fix. Do not rank. Do not conclude overall review status."
   - Return: `Finding: <violations only>` + `Sources: <file:line>`. Empty = silent pass.
   - Tools: Read, Grep.
-- **Sonnet minimum.**
 
 ## Exit Criteria
 
