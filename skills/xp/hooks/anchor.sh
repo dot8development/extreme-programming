@@ -95,11 +95,10 @@ EOF
 
             cat <<'EOF'
 
-[/xp hook installation — Claude Code]
+[/xp hook installation]
 
-Some /xp enforcement hooks are not wired into your Claude Code settings.
-Without them, /xp falls back to prose-only enforcement, which testing
-shows is bypassed (model uses Bash for exploration, skips test-first).
+Some /xp enforcement hooks are not wired in. Without them, /xp falls
+back to prose-only enforcement, which testing shows is bypassed.
 
 Missing hooks:
 EOF
@@ -111,15 +110,15 @@ EOF
 
 Pose this question verbatim, wait for the reply before continuing /xp:
 
-  "Your /xp enforcement hooks aren't wired into your Claude Code
-   settings. Install them now? (yes / no / don't ask again)"
+  "Your /xp enforcement hooks aren't installed. Install them now?
+   (yes / no / don't ask again)"
 
-yes → Read the install snippet from the "Claude Code" section of the
-      skill's README (${README_PATH:-at https://github.com/dot8development/extreme-programming#install}).
-      Merge it into ~/.claude/settings.json, preserving any existing
-      hooks (merge arrays per event, do not overwrite). Validate the
-      file with \`python3 -m json.tool\` or \`jq .\`. Report result.
-      The user must restart Claude Code for hooks to take effect.
+yes → Open the skill's README (${README_PATH:-at https://github.com/dot8development/extreme-programming}),
+      find the install section for whichever harness the user is
+      running, and apply it. Merge into the harness's settings file
+      preserving any existing hooks (merge arrays per event, do not
+      overwrite). Validate resulting JSON. Report result and tell the
+      user to restart their harness.
 
 no  → Proceed with /xp. Warning reappears next invocation.
 
