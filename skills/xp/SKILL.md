@@ -249,7 +249,7 @@ Human answering yes/no without asserting perspective, or explicitly deferring �
 
 **EXPLORATION BELONGS TO SUB-AGENTS.** Main agent orchestrates and synthesizes; it does not explore.
 
-Grep / Glob / WebFetch / WebSearch in the main agent → blocked by `explore.sh` hook. Use a sub-agent. Read stays allowed because Edit/Write require it for prep.
+Grep / Glob / WebFetch / WebSearch in the main agent → blocked by `explore.sh` hook. Bash exploration commands (cat, head, tail, grep, find, awk, sed, jq, wc, tree, git log/diff/show/blame/grep, etc.) also blocked — Bash is not an escape hatch. Use a sub-agent. Read stays allowed because Edit/Write require it for prep.
 
 Dispatch sub-agents for: locating definitions, analyzing patterns, tracing flow, code/doc/web research, running tests/builds/linters, parallel exploration of ≥2 options.
 

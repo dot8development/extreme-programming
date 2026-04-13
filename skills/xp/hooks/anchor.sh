@@ -68,6 +68,47 @@ EOF
     else
         printf 'Status: docs/xp/design-rules.md does NOT exist — will be created in Phase 05.\n'
     fi
+
+    # Hook installation check. Looks at common Claude Code settings paths
+    # and reports any /xp hooks missing from the wiring. Self-suppresses
+    # once all hooks are wired (warning stops appearing). Cross-harness
+    # users can ignore this section — it only checks Claude Code paths.
+    REQUIRED_HOOKS="offload-detect.sh test-first.sh hypothesis-first.sh explore.sh sonnet.sh return-format.sh"
+    SETTINGS_PATHS="$HOME/.claude/settings.json $CWD/.claude/settings.json $CWD/.claude/settings.local.json"
+    MISSING=""
+    for h in $REQUIRED_HOOKS; do
+        FOUND=0
+        for s in $SETTINGS_PATHS; do
+            if [ -f "$s" ] && grep -q "$h" "$s" 2>/dev/null; then
+                FOUND=1
+                break
+            fi
+        done
+        [ "$FOUND" = "0" ] && MISSING="$MISSING $h"
+    done
+
+    if [ -n "$MISSING" ]; then
+        cat <<EOF
+
+[/xp hook installation check — MISSING HOOKS]
+
+The following /xp enforcement hooks are not wired into your Claude Code
+settings.json:$MISSING
+
+Without these, /xp falls back to prose-only enforcement of its rules.
+Testing shows the model bypasses prose rules (uses Bash for exploration,
+skips test-first, etc.) without hook enforcement.
+
+Install: see https://github.com/dot8development/extreme-programming#install
+or copy the snippet from the README into ~/.claude/settings.json and
+restart your harness. This warning will disappear once the hooks are
+wired.
+
+(If you are running on a different harness — Codex / Cursor / Windsurf /
+Copilot / Cline — see the README for harness-specific install snippets.
+This check looks at Claude Code paths only.)
+EOF
+    fi
 fi
 
 exit 0
