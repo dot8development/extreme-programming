@@ -52,6 +52,10 @@ The skill ships three opt-in Claude Code hooks that convert the highest-risk rul
 
 Blocked hooks exit 2 — the harness surfaces stderr back to the model so it fixes the underlying violation. Do not disable hooks. Fix the violation.
 
+**Two hook types.** `anchor.sh` is an *injection hook* — it prepends a reminder on `/xp` invocation. It writes to stdout by design. The other two are *gate hooks* — silent on success, exit 2 on violation. Don't apply the "silent success" rule to anchor; it's the rule's only deliberate exception.
+
+**Throw-away discipline.** Hooks are not sacred. If a hook produces noise without preventing real failures, retire it. The skill ships with three because the failures they catch are observed (Phase 01 skip, code-before-test, code-without-hypothesis). If you find one isn't earning its keep on your project, remove it from your settings.json. Add hooks only on observed failure, never speculatively.
+
 ### Install
 
 After `npx skills add`, the hook scripts live at `~/.claude/skills/xp/hooks/` (or wherever the skill was installed). Add to your `~/.claude/settings.json`:

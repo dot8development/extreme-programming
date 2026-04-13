@@ -34,7 +34,7 @@
 
 ## When Experiments Replace Discussions
 
-"When experiments become cheap enough, they begin to replace discussions." If the triad is debating a design choice and a quick experiment could resolve it, prefer the experiment.
+"When experiments become cheap enough, they begin to replace discussions. A release can create clarity faster than a meeting." If the triad is debating a design choice and a quick experiment could resolve it, prefer the experiment.
 
 ## Delegation Rules (CLEAR — NOT VIOLATED)
 

@@ -1,15 +1,20 @@
 #!/usr/bin/env bash
-# xp/anchor.sh — UserPromptSubmit hook
+# xp/anchor.sh — UserPromptSubmit hook (INJECTION, not GATE)
 #
-# When the user invokes /xp, prepend an anchoring reminder to context so the
-# model is forced to re-read primary artifacts BEFORE responding. Implements
-# Iron Law #3: "DO NOT skip Phase 01 (Synchronize)."
+# Hook type: INJECTION. Writes to stdout to prepend context. This is the
+# deliberate exception to the "silent success" principle that governs gate
+# hooks (test-first.sh, hypothesis-first.sh). Injection hooks add context;
+# gate hooks block violations. Different jobs, different output rules.
+#
+# When the user invokes /xp, prepend an anchoring reminder so the model is
+# forced to re-read primary artifacts BEFORE responding. Implements Iron
+# Law #3: "DO NOT skip Phase 01 (Synchronize)."
 #
 # Fires only when:
 #   - Prompt starts with "/xp" (case insensitive, leading whitespace allowed)
 #
 # Output: text on stdout is prepended to the user's message in the agent's
-#         context window. Exit 0 always (this hook does not block).
+#         context window. Exit 0 always.
 
 set -euo pipefail
 

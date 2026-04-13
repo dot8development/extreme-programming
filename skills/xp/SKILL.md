@@ -45,22 +45,22 @@ Each shift stabilizes a specific bottleneck.
 
 1. **Cognitive Triad** — Customer, Developer, Model as roles. Quality of decisions emerges from tension between perspectives, not consensus. See Cognitive Triad section.
 2. **Radical Code Transparency** — Authorship is meaningless. The question is never "who wrote this" but "can the triad understand this." Maximize reduction of black-box risk.
-3. **Behavior-Oriented Development** — Tests define behavior; code is generated to satisfy them. Tests are the contract between humans and machines, and the programming language used to steer agents.
-4. **Continuous System Verification** — Verify the whole system continuously, not just changed parts. Generated changes risk silent regressions elsewhere.
-5. **Continuous Assimilation Process** — Every generated change is assimilated into the shared mental model before the next change starts. Never let unassimilated code accumulate.
-6. **Radical Simplicity** — Generative systems tend toward overcomplexity. The critical skill is consistently removing complexity, not inventing solutions.
-7. **Shared Mental Model** — Narratable structure — metaphors, domain language, naming — makes complexity collectively manageable. Design is evolutionary, not predictive.
+3. **Behavior-First Engineering** — Tests define behavior; code is generated to satisfy them. Tests are the contract between humans and machines, and the programming language used to steer agents.
+4. **Continuous System Verification** — CI becomes the acceptance layer for generated code. Verify the whole system continuously — generated changes risk *probabilistic drift*: small, locally correct changes that gradually shift the system away from its original structure and semantics.
+5. **Continuous Assimilation Process** — Every generated change is assimilated into the shared mental model before the next change starts. Bounded contexts create islands where complexity stays within context for both humans and models. Never let unassimilated code accumulate.
+6. **Radical Simplicity** — Generated code is no longer purely intentional but the result of a stochastic process. Generative systems tend toward overcomplexity; the critical skill is consistently removing it.
+7. **Shared Mental Model** — A good system metaphor acts as cognitive compression — making complexity narratable and therefore collectively manageable. In a world with coding agents, the mental model becomes the *generative architecture*: without it, LLM-generated code is locally meaningful without being globally coherent.
 8. **Machine-Enforceable Design** — Design rules are control signals for generative code — the system prompt of the repository. Prevent coherence drift at the tool level, not the review level.
-9. **Customer-Led Exploration** — Problem–solution fit is the customer's call. The model surfaces options; the customer selects.
-10. **Continuous Learning Cycle** — Problem understanding is refined continuously, not fixed upfront. Every cycle updates what we think we're building.
-11. **Small Experiments** — Ship the smallest increment that can produce learning. Releases replace discussions when experiments are cheap.
-12. **Sustainable Cognitive Load** — Speed never outranks the human's capacity to understand and judge. Self-regulate decision density.
+9. **Customer-Driven Discovery** — The customer becomes a co-discoverer in the search for the right solution. Problem–solution fit is the customer's call; the model surfaces options.
+10. **Continuous Discovery Loop** — Problem understanding is refined continuously, not fixed upfront. Every cycle updates what we think we're building.
+11. **Micro-Experiments** — Ship the smallest increment that can produce learning. When experiments become cheap enough, they begin to replace discussions — *a release can create clarity faster than a meeting*.
+12. **Sustainable Cognitive Load** — AI shifts the constraint into the human mind. As iteration speed rises, so do decision pressure, context switching, and mental load. Speed never outranks the human's capacity to understand and judge.
 
 ## New Patterns
 
-- **Disposable Code** — Generated code is first an exploration tool. Produced to learn, then discarded. The exploration output is understanding, not the code.
+- **Disposable Code** — Generated code is first an exploration tool. The classic spike solution becomes a core discipline: produced to learn, then discarded. The exploration output is understanding, not the code.
 - **Reconstructive Programming** — After exploration, implementation is deliberately rebuilt — test-driven, grounded in the understanding gained. Explore → discard → rebuild.
-- **Exploration at Scale** — Many solution variations explored in parallel (sub-agents). The human role shifts from production to selection. Saying no is more important than saying yes.
+- **Exploration at Scale** — Many solution variations explored in parallel (sub-agents). *Exploration replaces speculation with verifiable insight.* The human role shifts from production to selection — **value is no longer created by writing code, but by discarding possibilities.**
 
 ## Supporting Principles
 
@@ -71,13 +71,13 @@ Each shift stabilizes a specific bottleneck.
 
 ## The Cognitive Triad
 
-Customer — Developer — Model. **Roles, not people.**
+Pair programming evolves: Customer — Developer — Model. **Roles, not people.** The whole-team concept becomes more radical — a tightly coupled system of humans and generative models exploring problem and solution spaces together.
 
 - **Customer** — problem understanding, value decisions, experiment evaluation
-- **Developer** — system structure, integration, architectural coherence
-- **Model** — implementation, exploration, generation, synthesis, verification
+- **Developer** — system structure, integration, architectural coherence. The developer becomes less a *driver* and more a *navigator* of a system that explores entire solution spaces.
+- **Model** — implementation and exploration
 
-The human wears Customer and Developer. The Model role may be many models in parallel — sub-agents exploring different solution spaces. When dispatching, use capable models only. Understanding is every agent's output, not just code. Cheap models create understanding debt.
+The human wears Customer and Developer. The Model role may be many models in parallel — sub-agents exploring different solution spaces, swapped, specialized, or operating asynchronously. Roles rotate independently. Understanding is every agent's output, not just code. Cheap models create understanding debt.
 
 **The triad is not optional.** The model never plays Customer or Developer — not by filling the role itself, and not by accepting it when the human tries to hand it over. If the human insists, the skill refuses and redirects out.
 
@@ -356,6 +356,8 @@ Every sub-agent prompt has these four fields. Missing any field → violation.
 
 Sub-agents use **Sonnet or better**. Never Haiku. Never "cheap/fast." Cheap models produce understanding debt — they return text that looks like findings but skips the reasoning that makes findings trustworthy.
 
+> **Note — deliberate override:** general harness-engineering guidance (e.g., HumanLayer's post on coding-agent harnesses) recommends cheaper models like Haiku for sub-agents to control cost. /xp deliberately overrides this. The triad rests on understanding, not throughput; a sub-agent that returns a fluent-but-shallow finding pollutes the parent's context with debt the next assimilation step has to repay. Spend the tokens.
+
 ### Forbidden Outputs from sub-agents (reject and re-dispatch if seen)
 
 - Recommendations ("I suggest...", "the best approach is...")
@@ -394,6 +396,15 @@ These checkpoints are non-negotiable. Hooks enforce some. Prose-level discipline
 If a hook blocks you, **do not work around it.** Fix the underlying violation. Exit code 2 is the system telling you the rule was about to be broken — the rule is the right answer, not the obstacle.
 
 ---
+
+## Instruction Budget
+
+This skill itself costs reasoning tokens. Research (ETH Zurich) shows poorly-curated agent instructions can degrade performance 14–22% via reasoning-token overhead, and auto-generated agent files often hurt more than they help. Two consequences:
+
+- **Every section here must earn its keep.** If a rule isn't enforced (by hook, by test, or by visible failure when removed), it's ceremony — delete it.
+- **Be skeptical of new rules.** When something fails, the first response is to fix the underlying problem, not to add another paragraph here. We've added rules on observed failure modes — Strike escalation, Trust/Authority offloads, Sub-agent contract — because tests showed the failure was real. Add more only on the same evidence.
+
+This applies to operators too: connecting unused MCP servers, stacking custom hooks, or stuffing CLAUDE.md with universally-applied directives all eat the same budget. Less is more.
 
 ## Confirmation Bias Countermeasures
 

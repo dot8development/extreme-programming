@@ -32,6 +32,23 @@
   - Tools: Bash(test runner, linter), Read, Grep.
 - **Sonnet minimum.**
 
+### Suppress passing output
+
+Test runners and linters dump thousands of lines of passing output by default. That output ends up in the sub-agent's context, then in its return. Suppress it at the source. Pattern:
+
+```bash
+# pytest: only show failures + summary line
+pytest --tb=short -q 2>&1 | grep -E '(FAILED|ERROR|^=)' || true
+
+# jest: only show failed tests
+jest --silent 2>&1 | grep -E '(FAIL|●|Tests:)' || true
+
+# eslint: only files with errors
+eslint . 2>&1 | grep -E '(error|warning|✖)' || true
+```
+
+Adjust per tool. The principle: success is silent at every layer — runner, sub-agent, parent. Anything else fills the context with noise that degrades subsequent decisions.
+
 ## Exit Criteria
 
 - Full test suite passes
