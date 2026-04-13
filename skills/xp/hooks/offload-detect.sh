@@ -43,8 +43,11 @@ elif printf '%s' "$LOWER" | grep -qE 'i (give you |am giving you )?(explicit )?p
 # Bundled
 elif printf '%s' "$LOWER" | grep -qE 'just run with it|surprise me|whatever you think|whatever works'; then
     DETECTED=1; CATEGORY="bundled"
-# Passive (only when message is short and content-light — long passive words inside questions are fine)
-elif [ "$(printf '%s' "$PROMPT" | wc -w)" -le 5 ] && printf '%s' "$LOWER" | grep -qE '^(sure|yeah|yes|ok|okay|fine|whatever|go ahead|do it)\.?$|^(sure|yeah|yes|ok|okay|fine|whatever|go ahead|do it)[, .!]'; then
+# Passive (short, content-light, signals disengagement)
+# Note: "yes" is deliberately NOT here — "yes" to a direct yes/no question
+# is engagement, not offload. The patterns below signal acquiescence-without-
+# input: "sure / yeah / whatever / fine / ok" ≠ "yes" in register.
+elif [ "$(printf '%s' "$PROMPT" | wc -w)" -le 5 ] && printf '%s' "$LOWER" | grep -qE '^(sure|yeah|whatever|fine|go ahead|do it)\.?$|^(sure|yeah|whatever|fine|go ahead|do it)[, .!]'; then
     DETECTED=1; CATEGORY="passive"
 fi
 
