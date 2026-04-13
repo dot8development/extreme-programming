@@ -42,7 +42,7 @@ This is opinionated on purpose. The skill only produces collective intelligence 
 
 ## Optional: Enforcement Hooks
 
-The skill ships seven opt-in hooks that convert the highest-risk rules from prose discipline into deterministic enforcement. They only activate in projects that have a `docs/xp/` directory — non-/xp projects are unaffected.
+The skill ships six opt-in hooks that convert the highest-risk rules from prose discipline into deterministic enforcement. They only activate in projects that have a `docs/xp/` directory — non-/xp projects are unaffected.
 
 | Hook | Event | What it does |
 |---|---|---|
@@ -50,7 +50,6 @@ The skill ships seven opt-in hooks that convert the highest-risk rules from pros
 | `offload-detect.sh` | UserPromptSubmit | Scans user message for offload phrases (trust/authority/permission/passive). Injects Strike-1 trigger when detected. *(injection)* |
 | `test-first.sh` | PreToolUse (Write/Edit) | Blocks writes to source paths unless a test file was touched recently. Enforces Phase 06 Iron Law. |
 | `hypothesis-first.sh` | PreToolUse (Write/Edit) | Blocks writes to source paths if `docs/xp/hypothesis-log.md` is missing. |
-| `delegate.sh` | PreToolUse (Grep/Read/Glob) | Blocks the 3rd consecutive exploration call. Enforces DELEGATION IRON LAW. |
 | `sonnet.sh` | PreToolUse (Task/Agent) | Blocks Task dispatches with `model="haiku"`. Enforces Sonnet-minimum. |
 | `return-format.sh` | PostToolUse (Task/Agent) | Validates sub-agent returns contain `Finding:` + `Sources:`. Injects re-dispatch instruction on malformed returns. *(injection)* |
 
@@ -82,9 +81,6 @@ Hook scripts live at `~/.claude/skills/xp/hooks/` after `npx skills add`. Wire t
       { "matcher": "Write|Edit|MultiEdit", "hooks": [
           { "type": "command", "command": "bash ~/.claude/skills/xp/hooks/test-first.sh" },
           { "type": "command", "command": "bash ~/.claude/skills/xp/hooks/hypothesis-first.sh" }
-      ]},
-      { "matcher": "Grep|Read|Glob", "hooks": [
-          { "type": "command", "command": "bash ~/.claude/skills/xp/hooks/delegate.sh" }
       ]},
       { "matcher": "Task|Agent", "hooks": [
           { "type": "command", "command": "bash ~/.claude/skills/xp/hooks/sonnet.sh" }

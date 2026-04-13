@@ -247,13 +247,21 @@ Human answering yes/no without asserting perspective, or explicitly deferring �
 
 ## DELEGATION IRON LAW
 
-**THE MAIN AGENT DOES NOT HOARD EXPLORATION WORK.**
+**SUB-AGENTS ARE CONTEXT FIREWALLS.**
 
-Sub-agents are context firewalls. Without them, every Grep/Read/raw-dump degrades every subsequent decision.
+Delegate when the WORK would pollute the main context with output you don't need to keep around. Not based on call count — based on what flows back.
 
-**Required:** ≥2 distinct options in Phase 03 → parallel agents. Running tests/builds in Phase 06/07 → delegate. Cross-file tracing >2 files → delegate. *(3+ consecutive Grep/Read enforced by `delegate.sh` hook.)*
+**Delegate when:**
+- Running tests, builds, or linters → raw output is verbose and noisy
+- ≥2 distinct options in Phase 03 → parallel agents keep alternatives isolated until selection
+- Verifying design rules / scanning for patterns across the codebase → intermediate file content stays in the sub-agent
+- Anything that would dump large file contents or long tool output into the main thread
 
-**Forbidden:** sub-agents do not decide / recommend / conclude. No role-based agents ("frontend engineer", "Customer agent") — task-based only. No chat-partner usage.
+**Don't delegate when:**
+- A single Read/Grep gets you the answer — that's normal exploration, not a context problem
+- The output IS the thing you're working with (editing a file you just read, applying findings you just gathered)
+
+**Forbidden:** sub-agents do not decide / recommend / conclude. No role-based agents ("frontend engineer", "Customer agent") — task-based only.
 
 ### Sub-Agent Contract (every dispatch)
 
