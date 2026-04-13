@@ -9,34 +9,34 @@ The user invoked `/xp`. This skill has **Iron Laws** you MUST follow BEFORE your
 
 ## STEP 0 — Hook installation check (FIRST THING, BEFORE ANYTHING ELSE)
 
-Hooks install **locally per project**, not globally. One project opting in does not affect any other project.
+Hooks install **project-local**, not global. One project opting in does not affect any other.
 
 Before responding to the `/xp` request, before reading phase files, before anything:
 
-1. Read the **project-local** settings file(s). For Claude Code: `./.claude/settings.json` and `./.claude/settings.local.json` in the project root (`./` = working directory where `/xp` was invoked). For other harnesses: the project-scoped path per the README (e.g. `.cursor/hooks.json`, `.windsurf/hooks.json`, `.github/hooks/hooks.json`, `.codex/hooks.json`, `.clinerules/hooks/`).
-2. Check whether these seven /xp enforcement hooks are wired in the project settings: `anchor.sh`, `offload-detect.sh`, `test-first.sh`, `hypothesis-first.sh`, `explore.sh`, `sonnet.sh`, `return-format.sh`.
-3. Also check: does `./.claude/.xp-no-hooks` exist? If yes, skip this step — user opted out for this project.
-4. If any hook is missing AND the opt-out file does NOT exist: **ask the user once, then act on the answer yourself. Do not proceed with /xp until this is resolved.**
+1. **Detect which harness you are running in** (Claude Code, Codex CLI, Cursor, Windsurf, Copilot, Cline, Aider, Continue, other).
+2. **Read the skill's README install section for that harness.** It specifies the project-local settings file path and the snippet to install.
+3. Read that project-local settings file (if any) in the working directory where `/xp` was invoked.
+4. Check whether these seven /xp enforcement hooks are wired: `anchor.sh`, `offload-detect.sh`, `test-first.sh`, `hypothesis-first.sh`, `explore.sh`, `sonnet.sh`, `return-format.sh`.
+5. Check for an opt-out file at the project-local config path (e.g. `.xp-no-hooks` in the same directory as the settings file). If present, skip — user opted out for this project.
+6. If any hook is missing AND no opt-out: **ask the user once, then act on the answer yourself. Do not proceed with /xp until this is resolved.**
 
-**Do NOT read or modify global settings** (`~/.claude/settings.json`). Hook wiring is project-local only.
+**Do NOT touch any global/user-level settings file.** Only the project-local settings path defined by the README for the current harness.
 
 Use `AskUserQuestion` if your harness has it; otherwise pose as text and wait for the reply.
 
   Question: "Your /xp enforcement hooks aren't installed for this project. /xp falls back to prose-only rules without them, which testing shows the model bypasses. Install them locally to this project?"
   Options: yes / no / don't ask again for this project
 
-**yes** → YOU install them — locally, to the project:
-  - Detect the harness you're running in.
-  - Read the install section for that harness from the skill's README.
-  - Read the **project-local** settings file (e.g. `./.claude/settings.json`). Create the `.claude/` directory if absent.
-  - Merge the hooks block into that file: preserve existing hooks, append to arrays per event — do NOT overwrite. If the file doesn't exist, create it containing only the snippet.
-  - The hook `command` paths stay as `~/.claude/skills/xp/hooks/<name>.sh` — the SCRIPTS live where the skill was installed (global), only the WIRING is project-local.
-  - Write with Write/Edit. Validate with `python3 -m json.tool` or `jq .`. On parse failure, restore previous content and report.
-  - Tell the user the install is done for this project and they must restart their harness for hooks to take effect. Then stop — do not continue this /xp until restart.
+**yes** → YOU install them, project-local:
+  - Use the harness-specific settings path and snippet from the README.
+  - Create any missing parent directory.
+  - Merge the hooks block into the settings file: preserve existing hooks, append to arrays per event — do NOT overwrite. If the file doesn't exist, create it with the snippet.
+  - Validate the file with the harness's config format (JSON: `python3 -m json.tool` or `jq .`). On parse failure, restore previous content and report.
+  - Tell the user the install is done for this project and they must restart their harness. Stop — do not continue this /xp until restart.
 
 **no** → proceed with /xp for this session. Warning reappears next /xp in this project.
 
-**don't ask again for this project** → create `./.claude/.xp-no-hooks` (empty file in the project). This suppresses the check for this project only. Then proceed.
+**don't ask again for this project** → create the project-local opt-out file (empty) alongside the settings file. Then proceed.
 
 Only after Step 0 is resolved do you move to the constraints below.
 
