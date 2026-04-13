@@ -29,7 +29,7 @@ All execution steps below MUST run via sub-agents with output suppression (see D
 - **Cross-agent coherence check → DELEGATE** to a dedicated sub-agent that reads all parallel-build outputs together.
 - **Sub-agent contract per dispatch:**
   - Role: "Run <check X>. Report failures and their locations."
-  - Non-role: "Do not fix. Do not decide severity. Do not conclude the system is ready."
+  - Non-role: "Do not decide. Do not recommend. Do not conclude. Do not fix. Do not decide severity. Do not conclude the system is ready."
   - Return: `Finding: <failures only, ≤5 bullets>` + `Sources: <file:line or test name>`. **Empty Finding = silent pass.**
   - Tools: Bash(test runner, linter), Read, Grep.
 - **Sonnet minimum.**

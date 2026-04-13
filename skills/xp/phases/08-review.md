@@ -40,7 +40,7 @@ Five distinct checks. Passing one does not pass another.
 - Checks 1–4 can run in parallel. Check 5 runs after — it needs 1–4's findings.
 - **Sub-agent contract per dispatch:**
   - Role: "Run <check N> on <file set>."
-  - Non-role: "Do not fix. Do not rank. Do not conclude overall review status."
+  - Non-role: "Do not decide. Do not recommend. Do not conclude. Do not fix. Do not rank. Do not conclude overall review status."
   - Return: `Finding: <violations only>` + `Sources: <file:line>`. Empty = silent pass.
   - Tools: Read, Grep.
 - **Sonnet minimum.**

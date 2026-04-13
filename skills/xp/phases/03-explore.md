@@ -15,7 +15,7 @@
    - Alternatives must be viable, not strawmen.
    - If no real alternative exists, that itself is information.
 
-3. **Present with recommendation.** Lead with recommended approach + reasoning. Show trade-offs. Human selects.
+3. **Present with recommendation** *(main agent only — sub-agents do not recommend; see Delegation Rules below)*. Lead with recommended approach + reasoning. Show trade-offs. Human selects.
 
 4. **Resist building too early.** The real risk is committing too soon, not building too slowly. Exploration is cheaper than re-work.
 

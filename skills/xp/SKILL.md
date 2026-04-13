@@ -47,7 +47,7 @@ Each shift stabilizes a specific bottleneck.
 2. **Radical Code Transparency** — Authorship is meaningless. The question is never "who wrote this" but "can the triad understand this." Maximize reduction of black-box risk.
 3. **Behavior-First Engineering** — Tests define behavior; code is generated to satisfy them. Tests are the contract between humans and machines, and the programming language used to steer agents.
 4. **Continuous System Verification** — CI becomes the acceptance layer for generated code. Verify the whole system continuously — generated changes risk *probabilistic drift*: small, locally correct changes that gradually shift the system away from its original structure and semantics.
-5. **Continuous Assimilation Process** — Every generated change is assimilated into the shared mental model before the next change starts. Bounded contexts create islands where complexity stays within context for both humans and models. Never let unassimilated code accumulate.
+5. **Continuous Assimilation Process** — Refactoring shifts from a scarce resource to an inexpensive, near-continuous activity. Every generated change is assimilated into the shared mental model before the next change starts. Bounded contexts create islands where complexity stays within context for both humans and models. Never let unassimilated code accumulate.
 6. **Radical Simplicity** — Generated code is no longer purely intentional but the result of a stochastic process. Generative systems tend toward overcomplexity; the critical skill is consistently removing it.
 7. **Shared Mental Model** — A good system metaphor acts as cognitive compression — making complexity narratable and therefore collectively manageable. In a world with coding agents, the mental model becomes the *generative architecture*: without it, LLM-generated code is locally meaningful without being globally coherent.
 8. **Machine-Enforceable Design** — Design rules are control signals for generative code — the system prompt of the repository. Prevent coherence drift at the tool level, not the review level.
@@ -65,8 +65,8 @@ Each shift stabilizes a specific bottleneck.
 ## Supporting Principles
 
 - **Feedback loops at every timescale** — seconds (tests), minutes (assimilation), hours (integration), days (experiments). Maximize rate of learning.
-- **The thinking process is persistent** — hypothesis log is an append-only, *versionable* record of the decision tree. Not just code and tests, but the path to the decision.
-- **Code is disposable, understanding is not** — *two implementations are equivalent if they arise from the same context and pass the same tests.* Regenerate from clear context rather than maintain code nobody understands.
+- **The thinking process is persistent** — hypothesis log is an append-only record of the decision tree: reviewable, versionable, reproducible (not deterministic, but sufficiently stable), and in some cases executable. Not just code and tests, but the path to the decision.
+- **Code is disposable, understanding is not** — *two implementations are equivalent if they arise from the same context and pass the same tests.* Regenerate from clear context rather than maintain code nobody understands. Within limits, code loses its status as a long-lived asset; the system owns the ability to regenerate code, not the code itself.
 - **Stability under uncertainty** — XP never primarily aimed for speed but for stability under uncertainty. AI expands the solution space; the triad keeps the team from losing orientation in it.
 - **Confirmation bias is amplified by AI** — the triad exists partly as counterweight. Actively challenge, not just validate.
 
@@ -189,7 +189,7 @@ All patterns below trigger the SAME escalation.
 
 ### The Escalation — REQUIRED properties per strike
 
-Each strike has REQUIRED properties. Per-strike forbidden lists are consolidated in Pre-Send Checklist below. Each push from the human after a strike → next strike. Never re-issue the same level.
+Each strike has REQUIRED properties below. **All forbidden behaviors are in the Pre-Send Checklist (read it before sending any strike — it is not optional).** Each push from the human after a strike → next strike. Never re-issue the same level.
 
 **Strike 1 — Firm return with support**
 - 1–2 short sentences

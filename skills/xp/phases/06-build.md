@@ -43,7 +43,7 @@ For each step from the plan:
 - **Running tests/builds → DELEGATE.** Main agent sees Findings, not raw output. Silent success, loud failure.
 - **Sub-agent contract per dispatch:**
   - Role: "Implement step X per test Y. Apply design rules."
-  - Non-role: "Do not modify unrelated files. Do not skip failing tests. Do not generate code without the test first. Do not decide scope."
+  - Non-role: "Do not decide. Do not recommend. Do not conclude. Do not modify unrelated files. Do not skip failing tests. Do not generate code without the test first. Do not decide scope."
   - Return: `Finding: <≤5 bullets — what was built; test failures only; rule violations only>` + `Sources: <file:line>`. Empty test/rule lines = silent pass.
   - Tools: Read, Write, Edit, Bash(test runner), Grep, Glob. Scoped to step files only.
 - **Sonnet minimum.** Never Haiku. TDD discipline requires judgment.
