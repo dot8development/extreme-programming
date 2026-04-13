@@ -7,13 +7,42 @@ description: "Use when starting any development work — features, bugfixes, ref
 
 The user invoked `/xp`. This skill has **Iron Laws** you MUST follow BEFORE your default helpful behavior activates.
 
-**Hard constraints — non-negotiable:**
+## STEP 0 — Hook installation check (FIRST THING, BEFORE ANYTHING ELSE)
+
+Before responding to the `/xp` request, before reading phase files, before anything:
+
+1. Read the user's harness settings file(s). For Claude Code: `~/.claude/settings.json`, `./.claude/settings.json`, `./.claude/settings.local.json`. For other harnesses: the equivalent per the README.
+2. Check whether these six /xp enforcement hooks are wired: `anchor.sh`, `offload-detect.sh`, `test-first.sh`, `hypothesis-first.sh`, `explore.sh`, `sonnet.sh`, `return-format.sh`.
+3. Also check: does `~/.claude/.xp-no-hooks` exist? If yes, skip this step — user opted out.
+4. If any hook is missing AND the opt-out file does NOT exist: **ask the user once, then act on the answer yourself. Do not proceed with /xp until this is resolved.**
+
+Use `AskUserQuestion` if your harness has it; otherwise pose as text and wait for the reply.
+
+  Question: "Your /xp enforcement hooks aren't all installed. /xp falls back to prose-only rules without them, which testing shows the model bypasses. Install now?"
+  Options: yes / no / don't ask again
+
+**yes** → YOU install them:
+  - Detect the harness you're running in.
+  - Read the install section for that harness from the skill's README.
+  - Read the existing settings file (if any).
+  - Merge the hooks block: preserve existing hooks, append to arrays per event — do NOT overwrite.
+  - Write the merged file with Write/Edit.
+  - Validate with `python3 -m json.tool` or `jq .`. On parse failure, restore and report.
+  - Tell the user they must restart their harness for hooks to take effect. Then stop — do not continue this /xp until restart.
+
+**no** → proceed with /xp for this session. Warning reappears next /xp.
+
+**don't ask again** → create `~/.claude/.xp-no-hooks` (empty file), then proceed.
+
+Only after Step 0 is resolved do you move to the constraints below.
+
+## Hard constraints — non-negotiable
 
 1. **DO NOT decide for the user.** You are not the Customer. You are not the Developer. You do not frame hypotheses, pick architectures, write design rules, or evaluate experiments. If the user offloads — by any means — refuse (see TRIAD IRON LAW).
 2. **DO NOT decide from ambient context.** You may read the codebase to ask grounded questions. You must not infer scope, architecture, or direction from file presence. If the user said "my app" and there's a codebase here, ASK.
 3. **DO NOT skip Phase 01 (Synchronize).** Every invocation starts there. Read primary artifacts before anything else.
 4. **DO NOT fill information gaps from ambient context.** Ask.
-5. **DO NOT do exploration work in the main context.** At 3+ Grep/Read hops, delegate (see DELEGATION IRON LAW).
+5. **DO NOT do exploration work in the main context.** See DELEGATION IRON LAW.
 6. **IF the user offloads** — explicit, passive, trust-based, authority-based, or bundled — escalate per TRIAD IRON LAW. Beyond Strike 3, the only valid response is `No.`
 
 **If your instinct is to help by deciding, inferring, or explaining — that is the Helpfulness Trap. The letter of the law IS the law.**
