@@ -48,11 +48,11 @@ The skill ships seven opt-in hooks that convert the highest-risk rules from pros
 |---|---|---|
 | `anchor.sh` | UserPromptSubmit | On `/xp` invocation, prepends an anchoring reminder that Phase 01 (Synchronize) must run before responding. *(injection)* |
 | `offload-detect.sh` | UserPromptSubmit | Scans user message for offload phrases (trust/authority/permission/passive). Injects Strike-1 trigger when detected. *(injection)* |
-| `test-first.sh` | PreToolUse (Write/Edit) | Blocks writes to source paths unless a test file was touched recently. Enforces Phase 06 Iron Law. |
-| `hypothesis-first.sh` | PreToolUse (Write/Edit) | Blocks writes to source paths if `docs/xp/hypothesis-log.md` is missing. |
-| `explore.sh` | PreToolUse (Grep/Glob/WebFetch/WebSearch) | Blocks exploration tools in the main agent. Forces sub-agent dispatch. Read stays allowed (Edit needs it). |
-| `sonnet.sh` | PreToolUse (Task/Agent) | Blocks Task dispatches with `model="haiku"`. Enforces Sonnet-minimum. |
-| `return-format.sh` | PostToolUse (Task/Agent) | Validates sub-agent returns contain `Finding:` + `Sources:`. Injects re-dispatch instruction on malformed returns. *(injection)* |
+| `test-first.sh` | PreToolUse (Write/Edit; VS Code: create_file/replace_string_in_file/multi_replace_string_in_file) | Blocks writes to source paths unless a test file was touched recently. Enforces Phase 06 Iron Law. |
+| `hypothesis-first.sh` | PreToolUse (Write/Edit; VS Code: create_file/replace_string_in_file/multi_replace_string_in_file) | Blocks writes to source paths if `docs/xp/hypothesis-log.md` is missing. |
+| `explore.sh` | PreToolUse (Grep/Glob/WebFetch/WebSearch; VS Code: grep_search/file_search/semantic_search/fetch_webpage) | Blocks exploration tools in the main agent. Forces sub-agent dispatch. Read stays allowed (Edit needs it). |
+| `sonnet.sh` | PreToolUse (Task/Agent) | Blocks Task dispatches with `model="haiku"`. Enforces Sonnet-minimum. Skipped on VS Code (no model parameter on runSubagent). |
+| `return-format.sh` | PostToolUse (Task/Agent; VS Code: runSubagent) | Validates sub-agent returns contain `Finding:` + `Sources:`. Injects re-dispatch instruction on malformed returns. *(injection)* |
 
 Blocked hooks exit 2 — the harness surfaces stderr back to the model so it fixes the underlying violation. Do not disable hooks. Fix the violation.
 
@@ -159,21 +159,42 @@ Caveat: Windsurf has no documented context-injection from hooks, so anchor.sh's 
 </details>
 
 <details>
-<summary><b>GitHub Copilot</b> (Cloud Agent + VS Code) — <code>.github/hooks/hooks.json</code> (must be on default branch for Cloud Agent)</summary>
+<summary><b>GitHub Copilot (VS Code)</b> — <code>.github/hooks/*.json</code></summary>
+
+VS Code [agent hooks](https://code.visualstudio.com/docs/copilot/customization/hooks) support `UserPromptSubmit`, `PreToolUse`, and `PostToolUse` — all seven /xp hooks work natively. Create `.github/hooks/xp.json` in your project root:
 
 ```json
 {
-  "version": 1,
   "hooks": {
-    "userPromptSubmitted": [{ "command": "bash ~/.claude/skills/xp/hooks/anchor.sh" }],
-    "preToolUse": [
-      { "matcher": { "toolName": "edit_file" }, "command": "bash ~/.claude/skills/xp/hooks/test-first.sh" },
-      { "matcher": { "toolName": "edit_file" }, "command": "bash ~/.claude/skills/xp/hooks/hypothesis-first.sh" }
+    "UserPromptSubmit": [
+      { "type": "command", "command": "bash ~/.claude/skills/xp/hooks/anchor.sh" },
+      { "type": "command", "command": "bash ~/.claude/skills/xp/hooks/offload-detect.sh" }
+    ],
+    "PreToolUse": [
+      { "type": "command", "command": "bash ~/.claude/skills/xp/hooks/hypothesis-first.sh" },
+      { "type": "command", "command": "bash ~/.claude/skills/xp/hooks/test-first.sh" },
+      { "type": "command", "command": "bash ~/.claude/skills/xp/hooks/explore.sh" }
+    ],
+    "PostToolUse": [
+      { "type": "command", "command": "bash ~/.claude/skills/xp/hooks/return-format.sh" }
     ]
   }
 }
 ```
-Copilot prefers JSON `permissionDecision: "deny"` over exit code 2 — scripts may need a thin wrapper that converts exit 2 + stderr into a JSON `{"permissionDecision":"deny","reason":"<stderr>"}`. Status: untested. PRs welcome.
+
+VS Code uses different tool names and property casing than Claude Code. The hook scripts handle both conventions — no wrappers needed. Key differences to be aware of:
+
+| Claude Code | VS Code |
+|---|---|
+| `Write` / `Edit` / `MultiEdit` | `create_file` / `replace_string_in_file` / `multi_replace_string_in_file` |
+| `Grep` / `Glob` / `WebFetch` / `WebSearch` | `grep_search` / `file_search` / `semantic_search` / `fetch_webpage` |
+| `Bash` | `run_in_terminal` |
+| `Task` / `Agent` | `runSubagent` |
+| `tool_input.file_path` | `tool_input.filePath` (camelCase) |
+
+VS Code auto-loads hooks from `.github/hooks/`. Exit code 2 blocks the tool call and surfaces stderr to the model — same contract as Claude Code. `sonnet.sh` is skipped because VS Code's `runSubagent` doesn't expose a model parameter.
+
+Verify hooks are loaded: check the **GitHub Copilot Chat Hooks** output channel in VS Code.
 </details>
 
 <details>

@@ -3,8 +3,9 @@
 #
 # Enforces DELEGATION IRON LAW: exploration tools belong to sub-agents.
 # Blocks:
-#   - Grep / Glob / WebFetch / WebSearch (named exploration tools)
-#   - Bash commands whose verb-tokens are exploration commands
+#   - Grep / Glob / WebFetch / WebSearch (Claude Code)
+#   - grep_search / file_search / semantic_search / fetch_webpage (VS Code)
+#   - Bash / run_in_terminal commands whose verb-tokens are exploration commands
 #     (cat, head, tail, less, more, grep, egrep, fgrep, rg, ag, ack,
 #     find, fd, locate, awk, sed, tree, wc, diff, comm, file, xxd,
 #     hexdump, jq, yq, git log/diff/show/blame/grep)
@@ -17,7 +18,10 @@
 set -uo pipefail
 
 INPUT=$(cat)
-[ -d "$(pwd)/docs/xp" ] || exit 0
+# VS Code provides cwd in JSON input; fall back to pwd for Claude Code
+CWD=$(printf '%s' "$INPUT" | python3 -c 'import sys,json; d=json.load(sys.stdin); print(d.get("cwd",""))' 2>/dev/null || true)
+[ -n "$CWD" ] || CWD=$(pwd)
+[ -d "$CWD/docs/xp" ] || exit 0
 
 if ! command -v python3 >/dev/null 2>&1; then
     exit 0
@@ -37,9 +41,9 @@ print(d.get("tool_name", "") + "\t" + cmd.replace("\t"," ").replace("\n"," "))
 TOOL_NAME=$(printf '%s' "$PARSED" | cut -f1)
 COMMAND=$(printf '%s' "$PARSED" | cut -f2-)
 
-# Direct exploration tools — block immediately
+# Direct exploration tools — block immediately (Claude Code + VS Code names)
 case "$TOOL_NAME" in
-    Grep|Glob|WebFetch|WebSearch)
+    Grep|Glob|WebFetch|WebSearch|grep_search|file_search|semantic_search|fetch_webpage)
         cat >&2 <<EOF
 BLOCKED by /xp explore hook (DELEGATION IRON LAW).
 
@@ -61,7 +65,7 @@ Do not disable this hook.
 EOF
         exit 2
         ;;
-    Bash) ;;
+    Bash|run_in_terminal) ;;
     *) exit 0 ;;
 esac
 

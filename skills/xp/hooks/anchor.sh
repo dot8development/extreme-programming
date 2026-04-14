@@ -36,7 +36,9 @@ TRIMMED=$(printf '%s' "$PROMPT" | sed 's/^[[:space:]]*//')
 CMD=$(printf '%s' "$TRIMMED" | awk '{print tolower($1)}')
 
 if [ "$CMD" = "/xp" ]; then
-    CWD=$(pwd)
+    # VS Code provides cwd in JSON input; fall back to pwd for Claude Code
+    CWD=$(printf '%s' "$INPUT" | python3 -c 'import sys,json; d=json.load(sys.stdin); print(d.get("cwd",""))' 2>/dev/null || true)
+    [ -n "$CWD" ] || CWD=$(pwd)
     HYP="$CWD/docs/xp/hypothesis-log.md"
     RULES="$CWD/docs/xp/design-rules.md"
 

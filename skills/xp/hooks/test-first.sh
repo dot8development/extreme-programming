@@ -5,6 +5,9 @@
 # Blocks Write/Edit to non-test source paths unless a test file was touched
 # in the recent session history.
 #
+# Supports both Claude Code (Write/Edit/MultiEdit, file_path) and
+# VS Code Copilot (create_file/replace_string_in_file/multi_replace_string_in_file, filePath).
+#
 # Safety: activates only in /xp projects (docs/xp/ directory present).
 #         Non-/xp projects are unaffected.
 #
@@ -16,12 +19,16 @@ set -euo pipefail
 
 INPUT=$(cat)
 
+# VS Code provides cwd in JSON input; fall back to pwd for Claude Code
+CWD=$(printf '%s' "$INPUT" | python3 -c 'import sys,json; d=json.load(sys.stdin); print(d.get("cwd",""))' 2>/dev/null || true)
+[ -n "$CWD" ] || CWD=$(pwd)
+
 # Only activate in /xp projects
-if [ ! -d "$(pwd)/docs/xp" ]; then
+if [ ! -d "$CWD/docs/xp" ]; then
     exit 0
 fi
 
-# Parse tool_name and tool_input.file_path from the JSON
+# Parse tool_name, file path, and transcript_path (supports both snake_case and camelCase)
 TOOL_NAME=""
 FILE_PATH=""
 TRANSCRIPT_PATH=""
@@ -31,15 +38,21 @@ if command -v python3 >/dev/null 2>&1; then
 import sys, json
 d = json.load(sys.stdin)
 tn = d.get("tool_name", "")
-fp = d.get("tool_input", {}).get("file_path", "")
+ti = d.get("tool_input", {}) or {}
+fp = ti.get("file_path", "") or ti.get("filePath", "")
+# VS Code multi_replace_string_in_file: check first replacement
+if not fp and "replacements" in ti:
+    reps = ti["replacements"]
+    if isinstance(reps, list) and len(reps) > 0:
+        fp = reps[0].get("filePath", "") or reps[0].get("file_path", "")
 tp = d.get("transcript_path", "")
 print(tn, fp, tp)
 ' 2>/dev/null || printf '\n')
 fi
 
-# Only fire on Write/Edit
+# Only fire on Write/Edit (Claude Code) and file-writing tools (VS Code)
 case "$TOOL_NAME" in
-    Write|Edit|MultiEdit) ;;
+    Write|Edit|MultiEdit|create_file|replace_string_in_file|multi_replace_string_in_file) ;;
     *) exit 0 ;;
 esac
 
@@ -72,7 +85,7 @@ import sys, json, re
 
 path = sys.argv[1]
 test_pat = re.compile(r'(/test/|/tests/|/spec/|/__tests__/|_test\.|\.test\.|\.spec\.|_spec\.|Test\.|Spec\.)')
-write_tools = {"Write", "Edit", "MultiEdit"}
+write_tools = {"Write", "Edit", "MultiEdit", "create_file", "replace_string_in_file", "multi_replace_string_in_file"}
 
 try:
     with open(path, "r") as f:
@@ -98,7 +111,12 @@ for line in reversed(lines[-80:]):
         if block.get("type") == "tool_use":
             name = block.get("name", "")
             if name in write_tools:
-                fp = block.get("input", {}).get("file_path", "")
+                inp = block.get("input", {})
+                fp = inp.get("file_path", "") or inp.get("filePath", "")
+                if not fp and "replacements" in inp:
+                    reps = inp["replacements"]
+                    if isinstance(reps, list) and len(reps) > 0:
+                        fp = reps[0].get("filePath", "") or reps[0].get("file_path", "")
                 if fp and test_pat.search(fp):
                     print("1"); sys.exit()
 print("0")

@@ -13,7 +13,10 @@
 set -euo pipefail
 
 INPUT=$(cat)
-[ -d "$(pwd)/docs/xp" ] || exit 0
+# VS Code provides cwd in JSON input; fall back to pwd for Claude Code
+CWD=$(printf '%s' "$INPUT" | python3 -c 'import sys,json; d=json.load(sys.stdin); print(d.get("cwd",""))' 2>/dev/null || true)
+[ -n "$CWD" ] || CWD=$(pwd)
+[ -d "$CWD/docs/xp" ] || exit 0
 
 PROMPT=""
 if command -v python3 >/dev/null 2>&1; then
