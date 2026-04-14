@@ -12,7 +12,10 @@
 set -uo pipefail
 
 INPUT=$(cat)
-[ -d "$(pwd)/docs/xp" ] || exit 0
+# VS Code provides cwd in JSON input; fall back to pwd for Claude Code
+CWD=$(printf '%s' "$INPUT" | python3 -c 'import sys,json; d=json.load(sys.stdin); print(d.get("cwd",""))' 2>/dev/null || true)
+[ -n "$CWD" ] || CWD=$(pwd)
+[ -d "$CWD/docs/xp" ] || exit 0
 
 if ! command -v python3 >/dev/null 2>&1; then
     exit 0
@@ -43,8 +46,9 @@ print(tn + "\t" + tr[:8000].replace("\t"," ").replace("\n","\\n"))
 TOOL_NAME=$(printf '%s' "$PARSED" | cut -f1)
 RESPONSE=$(printf '%s' "$PARSED" | cut -f2- | sed 's/\\n/\n/g')
 
+# VS Code uses runSubagent; Claude Code uses Task/Agent
 case "$TOOL_NAME" in
-    Task|Agent) ;;
+    Task|Agent|runSubagent) ;;
     *) exit 0 ;;
 esac
 
